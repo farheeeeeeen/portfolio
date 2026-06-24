@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farheen Shaikh — Product Marketing</title>
+<meta name="description" content="Product marketer who helps fintech companies acquire, engage, and retain their dream customers.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --display:"Geist",system-ui,sans-serif;
+    --body:"Geist",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+    --paper:#FFFFFF;
+    --ink:#15141A;
+    --muted:#5F5E66;
+    --faint:#9C9BA3;
+    --hair:#E7E6E1;
+    --hair2:#EFEEE9;
+    --maxw:1080px;
+
+    /* category accent colours — used ONLY for number, accent line, metric values, highlight */
+    --teal:#0F6E56;  --teal-bg:#E1F5EE;  --teal-deep:#04342C;
+    --coral:#993C1D; --coral-bg:#FAECE7; --coral-deep:#4A1B0C;
+    --blue:#185FA5;  --blue-bg:#E6F1FB;  --blue-deep:#042C53;
+    --plum:#534AB7;  --plum-bg:#EEEDFE;  --plum-deep:#26215C;
+    --sand:#854F0B;  --sand-bg:#FAEEDA;  --sand-deep:#412402;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:var(--body);font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- top bar ---------- */
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:26px 0 0}
+  .topbar .id{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--faint)}
+  .topbar .actions{display:flex;gap:8px}
+  .btn{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;padding:8px 16px;
+    border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;transition:.16s}
+  .btn:hover{background:var(--ink);color:var(--paper)}
+  .btn.solid{background:var(--ink);color:var(--paper)}
+  .btn.solid:hover{background:#000}
+
+  /* ---------- identity ---------- */
+  header{padding:64px 0 56px}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(2.6rem,6vw,4rem);
+    letter-spacing:-.03em;line-height:1;margin-bottom:22px}
+  .lede{font-size:clamp(1.05rem,2.2vw,1.25rem);line-height:1.5;color:#3a3942;max-width:50ch;margin-bottom:20px}
+  .mark{padding:1px 7px;border-radius:2px;white-space:nowrap;font-weight:500}
+  .mark.a{background:var(--teal-bg);color:var(--teal-deep)}
+  .mark.e{background:var(--sand-bg);color:var(--sand-deep)}
+  .mark.r{background:var(--plum-bg);color:var(--plum-deep)}
+  .social{font-family:var(--mono);font-size:13px;color:var(--faint);display:flex;gap:22px}
+  .social a{transition:.15s}
+  .social a:hover{color:var(--ink)}
+
+  /* ---------- work grid ---------- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-bottom:72px}
+  .card{border:1px solid var(--hair);border-top:3px solid var(--accent,#ccc);
+    display:flex;flex-direction:column;background:var(--paper);text-align:left;cursor:pointer;
+    transition:transform .18s cubic-bezier(.2,.7,.2,1),border-color .18s}
+  .card:hover{transform:translateY(-3px);border-color:var(--hair)}
+  .card:hover{border-top-color:var(--accent)}
+  .card:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+  .card.span{grid-column:1 / -1}
+
+  .shot{margin:14px 14px 0;border:1px solid var(--hair2);background:#FAFAF8;
+    height:240px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .card.span .shot{height:210px}
+  .shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .shot .ph{font-family:var(--mono);font-size:10.5px;color:var(--faint);letter-spacing:.04em;text-align:center;padding:0 14px}
+
+  .panel{padding:18px 22px 22px;flex:1;display:flex;flex-direction:column}
+  .panel .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .panel h2{font-family:var(--display);font-weight:600;font-size:1.32rem;letter-spacing:-.01em;
+    color:var(--ink);line-height:1.1}
+  .panel .num{font-family:var(--mono);font-size:11px;color:var(--accent)}
+  .panel .desc{font-size:13.5px;line-height:1.5;color:var(--muted);margin-bottom:16px;max-width:46ch}
+  .stats{margin-top:auto;display:flex;gap:26px;flex-wrap:wrap}
+  .stat .v{font-family:var(--display);font-size:1.05rem;font-weight:600;color:var(--accent)}
+  .stat .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;color:var(--faint);margin-top:2px}
+
+
+  footer{border-top:1px solid var(--hair);padding:28px 0 48px;
+    font-family:var(--mono);font-size:12px;color:var(--faint);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  @media(max-width:720px){
+    .grid{grid-template-columns:1fr}
+    .card.span{grid-column:auto}
+    .sub,.sub.open{grid-template-columns:1fr}
+    .shot{height:200px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <span class="id">FARHEEN SHAIKH</span>
+    <div class="actions">
+      <a class="btn" href="#contact">Contact</a>
+      <a class="btn" href="read.html" target="_blank" rel="noopener">Read</a>
+      <a class="btn solid" href="resume.html">Résumé</a>
+    </div>
+  </div>
+
+  <header>
+    <h1>Farheen Shaikh</h1>
+    <p class="lede">Product marketer who helps fintech companies
+      <span class="mark a">acquire</span>,
+      <span class="mark e">engage</span>, and
+      <span class="mark r">retain</span> their dream customers.</p>
+    <nav class="social">
+      <a href="https://www.linkedin.com/in/farheenshaikh28/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="#" target="_blank" rel="noopener">X</a>
+      <a href="#" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="grid">
+
+    <!-- 01 AI Automation -->
+    <a class="card" href="project-ai-automation.html" style="--accent:var(--teal)">
+      <div class="shot"><img src="images/ai-automation.svg" alt="AI content operations system" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/ai-automation.svg</span>')"></div>
+      <div class="panel">
+        <div class="row"><h2>AI Automation</h2><span class="num">01</span></div>
+        <p class="desc">A system that strategizes, creates, and tracks long-form content aligned with business objectives.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">&lt;2 hrs</div><div class="k">WEEKLY UPKEEP</div></div>
+          <div class="stat"><div class="v">3–4d→1d</div><div class="k">PLANNING</div></div>
+        </div>
+      </div>
+    </a>
+
+    <!-- 02 Product MVPs -->
+    <a class="card" href="project-mvp.html" style="--accent:var(--coral)">
+      <div class="shot"><img src="images/calculators.webp" alt="SAFE and ROI calculators" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/calculators.webp</span>')"></div>
+      <div class="panel">
+        <div class="row"><h2>Product MVPs</h2><span class="num">02</span></div>
+        <p class="desc">Two live calculators — SAFE and ROI — built end to end as a PMM, not an engineer.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">2 live</div><div class="k">SHIPPED SOLO</div></div>
+          <div class="stat"><div class="v">Ungated</div><div class="k">BY DESIGN</div></div>
+        </div>
+      </div>
+    </a>
+
+    <!-- 03 Growth -->
+    <a class="card" href="project-growth.html" style="--accent:var(--blue)">
+      <div class="shot"><img src="images/growth.png" alt="Organic growth and rankings" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/growth.png</span>')"></div>
+      <div class="panel">
+        <div class="row"><h2>Growth &amp; Demand Gen</h2><span class="num">03</span></div>
+        <p class="desc">Demand built on intent, not volume — ranking for the searches the actual buyer makes.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">2.6k→9.3k</div><div class="k">CLICKS / MO</div></div>
+          <div class="stat"><div class="v">65,742</div><div class="k">1 EXPLAINER</div></div>
+        </div>
+      </div>
+    </a>
+
+    <!-- 04 Positioning -->
+    <a class="card" href="project-positioning.html" style="--accent:var(--plum)">
+      <div class="shot"><img src="images/positioning.png" alt="Persona and competitor pages" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/positioning.png</span>')"></div>
+      <div class="panel">
+        <div class="row"><h2>Positioning</h2><span class="num">04</span></div>
+        <p class="desc">Persona and competitor pages that meet each buyer in their own frame.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">4 pages</div><div class="k">PERSONA + COMP</div></div>
+          <div class="stat"><div class="v">2 + 2</div><div class="k">ROLES / RIVALS</div></div>
+        </div>
+      </div>
+    </a>
+
+    <!-- 05 Engagement & Retention -->
+    <a class="card span" href="project-engagement-retention.html" style="--accent:var(--sand)">
+      <div class="shot"><img src="images/engagement.webp" alt="Mudrex engagement and Coins campaign" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/engagement.webp</span>')"></div>
+      <div class="panel">
+        <div class="row"><h2>Engagement &amp; Retention</h2><span class="num">05</span></div>
+        <p class="desc">In-app content that gave users reasons to open the app beyond price action, and a campaign that won dormant users back.</p>
+        <div class="stats">
+          <div class="stat"><div class="v">+36%</div><div class="k">30-DAY RETENTION</div></div>
+          <div class="stat"><div class="v">787</div><div class="k">WON BACK</div></div>
+          <div class="stat"><div class="v">24%</div><div class="k">OF SESSIONS</div></div>
+        </div>
+      </div>
+    </a>
+
+  </main>
+
+  <footer id="contact">
+    <span>© 2026 Farheen Shaikh</span>
+    <span>Mumbai, India · 28.shaikh.farheen@gmail.com</span>
+  </footer>
+
+</div>
+
+
+</body>
+</html>

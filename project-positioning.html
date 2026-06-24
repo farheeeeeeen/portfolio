@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Positioning — Farheen Shaikh</title>
+<meta name="description" content="Persona and competitor pages that meet each buyer in their own frame.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --display:"Geist",system-ui,sans-serif;
+    --body:"Geist",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+    --paper:#FFFFFF;
+    --ink:#15141A;
+    --muted:#5F5E66;
+    --faint:#9C9BA3;
+    --hair:#E7E6E1;
+    --hair2:#EFEEE9;
+    --maxw:880px;
+
+    /* Positioning = plum */
+    --accent:#534AB7;
+    --accent-bg:#EEEDFE;
+    --accent-deep:#26215C;
+    --accent-soft:#CECBF6;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);
+    font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+
+  .mininav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.9);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .mininav .bar{max-width:var(--maxw);margin:0 auto;padding:0 28px;height:56px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .mininav .home{font-family:var(--mono);font-size:13px;color:var(--ink);white-space:nowrap}
+  .mininav .home:hover{color:var(--accent)}
+  .mininav .right{display:flex;align-items:center;gap:8px}
+  .mininav .btn{font-family:var(--mono);font-size:12px;letter-spacing:.02em;padding:7px 14px;
+    border:1px solid var(--ink);background:transparent;color:var(--ink);transition:.15s;cursor:pointer}
+  .mininav .btn:hover{background:var(--ink);color:#fff}
+  .mininav .btn.solid{background:var(--ink);color:#fff}
+  .mininav .btn.solid:hover{background:#000}
+  .dd{position:relative}
+  .dd .btn.toggle{display:inline-flex;align-items:center;gap:6px}
+  .dd .menu{position:absolute;top:calc(100% + 8px);right:0;min-width:210px;
+    background:#fff;border:1px solid var(--hair);padding:6px;display:none;
+    box-shadow:0 8px 28px rgba(0,0,0,.08)}
+  .dd.open .menu{display:block}
+  .dd .menu a{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);
+    padding:9px 12px;white-space:nowrap;transition:.12s}
+  .dd .menu a:hover{background:var(--hair2);color:var(--ink)}
+  .dd .menu a.here{color:var(--accent-deep);background:var(--accent-bg)}
+  @media(max-width:560px){.mininav .btn.txt{display:none}}
+
+  header{padding:52px 0 0}
+  .crumb{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:26px;display:flex;align-items:center;gap:8px}
+  .crumb a{color:var(--muted);transition:.15s}
+  .crumb a:hover{color:var(--accent)}
+  .crumb .sep{color:var(--hair);}
+  .crumb .cur{color:var(--accent)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--accent);
+    display:flex;align-items:center;gap:8px;margin-bottom:20px}
+  .eyebrow .sq{width:9px;height:9px;background:var(--accent);display:inline-block}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(2.1rem,5vw,3.1rem);
+    letter-spacing:-.025em;line-height:1.05;margin-bottom:18px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:12.5px;
+    color:var(--muted);align-items:center;padding-bottom:36px;border-bottom:1px solid var(--hair)}
+  .meta .live{color:var(--accent);border:1px solid var(--accent);padding:5px 12px;transition:.15s}
+  .meta .live:hover{background:var(--accent);color:#fff}
+
+  .framing{padding:40px 0}
+  .framing p{font-size:18px;line-height:1.65;color:#2c2b33;max-width:60ch}
+
+  /* 2x2 grid; clicked card spans full width, others reflow below */
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-bottom:20px}
+  .pcard{border:1px solid var(--hair);border-top:3px solid var(--accent);background:var(--paper);
+    cursor:pointer;transition:transform .15s,border-color .15s;text-align:left;width:100%;font:inherit;color:inherit}
+  .pcard:hover{transform:translateY(-2px)}
+  .pcard:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .pcard .head{padding:22px 24px}
+  .pcard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--accent)}
+  .pcard h2{font-family:var(--display);font-size:1.25rem;font-weight:600;letter-spacing:-.01em;
+    margin:10px 0 8px;color:var(--ink)}
+  .pcard .promise{font-size:13.5px;color:var(--muted);line-height:1.45}
+  .pcard .more{font-family:var(--mono);font-size:11.5px;color:var(--accent);margin-top:16px;
+    display:inline-flex;align-items:center;gap:6px}
+  .pcard .more::before{content:"+";font-size:14px}
+  .pcard .body{display:none;padding:0 24px 24px}
+  .pcard .body h3{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--accent);
+    text-transform:uppercase;margin:18px 0 7px}
+  .pcard .body p{font-size:15px;line-height:1.65;color:#2c2b33;max-width:70ch;margin-bottom:16px}
+  .pcard .body p:last-of-type{margin-bottom:0}
+  .pcard .shot{margin-top:24px;border:1px solid var(--hair2);border-radius:8px;background:#FAFAF8;
+    overflow:hidden;height:auto}
+  .pcard .shot img{width:100%;height:auto;display:block}
+  .pcard .shot .ph{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:center;padding:20px 14px;display:flex;align-items:center;justify-content:center;height:200px}
+
+  .pcard.open{grid-column:1 / -1;order:-1}
+  .pcard.open{cursor:default}
+  .pcard.open:hover{transform:none}
+  .pcard.open .head{border-bottom:1px solid var(--hair2)}
+  .pcard.open .body{display:block}
+  .pcard.open .more::before{content:"–"}
+  .pcard.open .more{color:var(--faint)}
+  @media(max-width:640px){.pgrid{grid-template-columns:1fr}.pcard .shot{height:200px}}
+
+  .pagenav{display:flex;justify-content:space-between;gap:16px;padding:40px 0 56px;
+    border-top:1px solid var(--hair);margin-top:20px}
+  .pagenav a{font-family:var(--mono);font-size:13px;color:var(--muted);transition:.15s;display:flex;flex-direction:column;gap:4px}
+  .pagenav a:hover{color:var(--ink)}
+  .pagenav .dir{font-size:11px;color:var(--faint)}
+  .pagenav .nxt{text-align:right}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<nav class="mininav">
+  <div class="bar">
+    <a class="home" href="index.html">⌂ Home</a>
+    <div class="right">
+      <div class="dd" id="dd">
+        <button class="btn toggle" type="button" id="ddBtn" aria-haspopup="true" aria-expanded="false">Projects ▾</button>
+        <div class="menu">
+          <a href="project-ai-automation.html">01 · AI Automation</a>
+          <a href="project-growth.html">02 · Growth &amp; Demand Gen</a>
+          <a href="project-mvp.html">03 · Product MVPs</a>
+          <a href="project-positioning.html" class="here">04 · Positioning</a>
+          <a href="project-engagement-retention.html">05 · Engagement &amp; Retention</a>
+        </div>
+      </div>
+      <a class="btn txt" href="read.html" target="_blank" rel="noopener">Read</a>
+      <a class="btn txt" href="mailto:28.shaikh.farheen@gmail.com">Contact</a>
+      <a class="btn solid" href="resume.html">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <header>
+    <nav class="crumb"><a href="index.html">Home</a> <span class="sep">/</span> <span class="cur">Positioning</span></nav>
+    <div class="eyebrow"><span class="sq"></span>POSITIONING · EQUITYLIST</div>
+    <h1>Persona &amp; Competitor Pages</h1>
+    <div class="meta">
+      <span>Positioning · messaging · research · copy</span>
+      <span>4 pages live</span>
+      <a class="live" href="#" target="_blank" rel="noopener">See them live →</a>
+    </div>
+  </header>
+
+  <div class="framing">
+    <p>Equity management has multiple front doors. A founder comparing tools, an HR lead, and a finance lead each speak a different language and fear a different failure. One generic product page speaks to none of them. Four pages, each built to meet one buyer in their own frame.</p>
+  </div>
+
+  <main class="pgrid">
+
+    <button class="pcard" type="button">
+      <div class="head">
+        <span class="tag">COMPETITOR · CARTA</span>
+        <h2>Carta alternative</h2>
+        <p class="promise">Win the founder who's outgrowing Carta.</p>
+        <span class="more">The breakdown</span>
+      </div>
+      <div class="body">
+        <h3>The problem</h3>
+        <p>A founder comparing tools knows Carta, and Carta is built for the US-first startup. But a growing share of founders hire internationally before they're US-centric, and for them Carta's model fits awkwardly.</p>
+        <h3>The positioning move</h3>
+        <p>Don't out-feature Carta; reframe the buyer. Lead with global-first, then independent 409A valuations. The POV: Carta works for US startups; EquityList is built for founders who hire across borders first.</p>
+        <div class="shot">
+          <img src="images/positioning_carta_alternative.webp" alt="Carta alternative positioning page" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/positioning_carta_alternative.webp</span>')">
+        </div>
+      </div>
+    </button>
+
+    <button class="pcard" type="button">
+      <div class="head">
+        <span class="tag">COMPETITOR · QAPITA</span>
+        <h2>Qapita alternative</h2>
+        <p class="promise">Win on unification, not feature count.</p>
+        <span class="more">The breakdown</span>
+      </div>
+      <div class="body">
+        <h3>The problem</h3>
+        <p>A founder evaluating Qapita is choosing between platforms that look similar on the surface. The real difference is fragmentation — separate 409As, buybacks handled outside the tool, cap-table data you assemble yourself.</p>
+        <h3>The positioning move</h3>
+        <p>Lead with one platform, not a patchwork — unified 409As, in-platform buybacks, cap-table sourcing. The POV: complexity is a cost, not a feature.</p>
+        <div class="shot">
+          <img src="images/positioning_qapita_alternative.webp" alt="Qapita alternative positioning page" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/positioning_qapita_alternative.webp</span>')">
+        </div>
+      </div>
+    </button>
+
+    <button class="pcard" type="button">
+      <div class="head">
+        <span class="tag">PERSONA · HR</span>
+        <h2>HR persona</h2>
+        <p class="promise">Take the operational load off HR.</p>
+        <span class="more">The breakdown</span>
+      </div>
+      <div class="body">
+        <h3>The problem</h3>
+        <p>An HR lead wants to make equity real for employees, but equity admin lands on their desk as operational load — grants to issue, pools to track, systems that don't sync. The fear: the admin swallows them, and employees still don't understand what they hold.</p>
+        <h3>The positioning move</h3>
+        <p>Lead with taking the load off HR, not with the feature set — bulk grants, pool tracking, HRMS syncs, employee dashboards. The POV: equity admin is a distributed responsibility, not a dedicated function.</p>
+        <div class="shot">
+          <img src="images/positioning_hr.webp" alt="HR persona positioning page" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/positioning_hr.webp</span>')">
+        </div>
+      </div>
+    </button>
+
+    <button class="pcard" type="button">
+      <div class="head">
+        <span class="tag">PERSONA · FINANCE</span>
+        <h2>Finance persona</h2>
+        <p class="promise">Reporting that survives an audit.</p>
+        <span class="more">The breakdown</span>
+      </div>
+      <div class="body">
+        <h3>The problem</h3>
+        <p>A finance lead's failure is an audit that doesn't hold. As the company grows, reporting has to satisfy IFRS 2, IND AS 102, ASC 718 — and most of it is still done manually, which is where errors live. They don't want features; they want to trust the numbers.</p>
+        <h3>The positioning move</h3>
+        <p>Lead with audit-ready reporting that scales — per-round reconciliation, board-ready reports, the standards named explicitly. The POV: audit trust isn't a feature to sell, it's table stakes, and the competition still does it by hand.</p>
+        <div class="shot">
+          <img src="images/positioning_finance.webp" alt="Finance persona positioning page" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/positioning_finance.webp</span>')">
+        </div>
+      </div>
+    </button>
+
+  </main>
+
+  <div class="pagenav">
+    <a href="project-mvp.html"><span class="dir">←</span>Product MVPs</a>
+    <a class="nxt" href="project-engagement-retention.html"><span class="dir">Next →</span>Engagement &amp; Retention</a>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.pcard').forEach(function(card){
+    card.addEventListener('click',function(){
+      card.classList.toggle('open');
+    });
+  });
+  (function(){
+    var dd=document.getElementById('dd'),btn=document.getElementById('ddBtn');
+    btn.addEventListener('click',function(e){e.stopPropagation();var o=dd.classList.toggle('open');btn.setAttribute('aria-expanded',o);});
+    document.addEventListener('click',function(){dd.classList.remove('open');btn.setAttribute('aria-expanded',false);});
+  })();
+</script>
+
+</body>
+</html>

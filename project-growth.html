@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growth & Demand Gen — Farheen Shaikh</title>
+<meta name="description" content="Demand built on intent, not volume — ranking for the searches the actual buyer makes.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --display:"Geist",system-ui,sans-serif;
+    --body:"Geist",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+
+    --paper:#FFFFFF;
+    --ink:#15141A;
+    --muted:#5F5E66;
+    --faint:#9C9BA3;
+    --hair:#E7E6E1;
+    --hair2:#EFEEE9;
+    --maxw:880px;
+
+    /* this page's category accent — Growth = blue */
+    --accent:#185FA5;
+    --accent-bg:#E6F1FB;
+    --accent-deep:#042C53;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);
+    font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- sticky mini-nav (single row + dropdown) ---------- */
+  .mininav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.9);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .mininav .bar{max-width:var(--maxw);margin:0 auto;padding:0 28px;height:56px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .mininav .home{font-family:var(--mono);font-size:13px;color:var(--ink);white-space:nowrap}
+  .mininav .home:hover{color:var(--accent)}
+  .mininav .right{display:flex;align-items:center;gap:8px}
+  .mininav .btn{font-family:var(--mono);font-size:12px;letter-spacing:.02em;padding:7px 14px;
+    border:1px solid var(--ink);background:transparent;color:var(--ink);transition:.15s;cursor:pointer}
+  .mininav .btn:hover{background:var(--ink);color:#fff}
+  .mininav .btn.solid{background:var(--ink);color:#fff}
+  .mininav .btn.solid:hover{background:#000}
+
+  .dd{position:relative}
+  .dd .btn.toggle{display:inline-flex;align-items:center;gap:6px}
+  .dd .menu{position:absolute;top:calc(100% + 8px);right:0;min-width:210px;
+    background:#fff;border:1px solid var(--hair);padding:6px;display:none;
+    box-shadow:0 8px 28px rgba(0,0,0,.08)}
+  .dd.open .menu{display:block}
+  .dd .menu a{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);
+    padding:9px 12px;white-space:nowrap;transition:.12s}
+  .dd .menu a:hover{background:var(--hair2);color:var(--ink)}
+  .dd .menu a.here{color:var(--accent-deep);background:var(--accent-bg)}
+  @media(max-width:560px){.mininav .btn.txt{display:none}}
+
+  /* ---------- header ---------- */
+  header{padding:52px 0 0}
+  .crumb{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:26px;display:flex;align-items:center;gap:8px}
+  .crumb a{color:var(--muted);transition:.15s}
+  .crumb a:hover{color:var(--accent)}
+  .crumb .sep{color:var(--hair);}
+  .crumb .cur{color:var(--accent)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--accent);
+    display:flex;align-items:center;gap:8px;margin-bottom:20px}
+  .eyebrow .sq{width:9px;height:9px;background:var(--accent);display:inline-block}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(2.1rem,5vw,3.1rem);
+    letter-spacing:-.025em;line-height:1.05;margin-bottom:18px;max-width:18ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:12.5px;
+    color:var(--muted);align-items:center;padding-bottom:36px;border-bottom:1px solid var(--hair)}
+  .meta .live{color:var(--accent);border:1px solid var(--accent);padding:5px 12px;transition:.15s}
+  .meta .live:hover{background:var(--accent);color:#fff}
+
+  /* ---------- hero image ---------- */
+  .hero-img{margin:36px 0 8px;border:1px solid var(--hair);background:#FAFAF8;
+    height:380px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .hero-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-img .ph{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.04em}
+
+  /* ---------- body sections ---------- */
+  section{padding:44px 0;border-bottom:1px solid var(--hair2)}
+  section:last-of-type{border-bottom:none}
+  .sec-label{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--accent);
+    margin-bottom:18px;text-transform:uppercase}
+  section p{font-size:17px;line-height:1.7;color:#2c2b33;margin-bottom:16px;max-width:64ch}
+  section p:last-child{margin-bottom:0}
+
+  .illo{margin:24px 0 0;border:1px solid var(--hair);background:#FAFAF8;
+    height:300px;display:flex;align-items:center;justify-content:center}
+  .illo .ph{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.04em;text-align:center;padding:0 20px}
+
+  /* ---------- impact ---------- */
+  .impact .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--hair);
+    border:1px solid var(--hair);margin-top:4px}
+  .impact .cell{background:var(--paper);padding:22px 24px}
+  .impact .v{font-family:var(--display);font-size:1.6rem;font-weight:600;color:var(--accent-deep);letter-spacing:-.02em}
+  .impact .k{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:7px}
+  @media(max-width:560px){.impact .grid{grid-template-columns:1fr}}
+
+  /* ---------- footer nav ---------- */
+  .pagenav{display:flex;justify-content:space-between;gap:16px;padding:40px 0 56px}
+  .pagenav a{font-family:var(--mono);font-size:13px;color:var(--muted);transition:.15s;
+    display:flex;flex-direction:column;gap:4px}
+  .pagenav a:hover{color:var(--ink)}
+  .pagenav .dir{font-size:11px;color:var(--faint)}
+  .pagenav .nxt{text-align:right}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<nav class="mininav">
+  <div class="bar">
+    <a class="home" href="index.html">⌂ Home</a>
+    <div class="right">
+      <div class="dd" id="dd">
+        <button class="btn toggle" type="button" id="ddBtn" aria-haspopup="true" aria-expanded="false">Projects ▾</button>
+        <div class="menu">
+          <a href="project-ai-automation.html">01 · AI Automation</a>
+          <a href="project-growth.html" class="here">02 · Growth &amp; Demand Gen</a>
+          <a href="project-mvp.html">03 · Product MVPs</a>
+          <a href="project-positioning.html">04 · Positioning</a>
+          <a href="project-engagement-retention.html">05 · Engagement &amp; Retention</a>
+        </div>
+      </div>
+      <a class="btn txt" href="read.html" target="_blank" rel="noopener">Read</a>
+      <a class="btn txt" href="mailto:28.shaikh.farheen@gmail.com">Contact</a>
+      <a class="btn solid" href="resume.html">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <header>
+    <nav class="crumb"><a href="index.html">Home</a> <span class="sep">/</span> <span class="cur">Growth &amp; Demand Gen</span></nav>
+    <div class="eyebrow"><span class="sq"></span>GROWTH &amp; DEMAND GEN · EQUITYLIST</div>
+    <h1>Growth &amp; Demand Gen</h1>
+    <div class="meta">
+      <span>EquityList · Content &amp; SEO</span>
+      <span>Strategy + execution</span>
+      <span>Mar 2024 – present</span>
+    </div>
+  </header>
+
+  <section class="impact">
+    <div class="sec-label">Impact</div>
+    <div style="display:grid;grid-template-columns:1fr;gap:48px;margin-top:32px;max-width:900px">
+      <!-- Site organic clicks -->
+      <div>
+        <div style="margin-bottom:24px">
+          <div style="font-size:32px;font-weight:700;color:var(--accent);line-height:1.2;margin-bottom:8px">2.6k → 9.3k</div>
+          <div style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">Organic Clicks / Mo (Site)</div>
+        </div>
+        <div style="border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:#FAFAF8">
+          <img src="images/growth_website + blog.png" alt="Site organic traffic growth" style="width:100%;height:auto;display:block" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span style=padding:20px;display:block;font-family:monospace;font-size:11px;color:var(--faint);text-align:center>growth_website+blog.png</span>')">
+        </div>
+      </div>
+
+      <!-- Blog organic clicks -->
+      <div>
+        <div style="margin-bottom:24px">
+          <div style="font-size:32px;font-weight:700;color:var(--accent);line-height:1.2;margin-bottom:8px">1.8k → 7.6k</div>
+          <div style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">Organic Clicks / Mo (Blog)</div>
+        </div>
+        <div style="border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:#FAFAF8">
+          <img src="images/growth_blog.png" alt="Blog organic traffic growth" style="width:100%;height:auto;display:block" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span style=padding:20px;display:block;font-family:monospace;font-size:11px;color:var(--faint);text-align:center>growth_blog.png</span>')">
+        </div>
+      </div>
+
+      <!-- One explainer impact -->
+      <div>
+        <div style="margin-bottom:24px">
+          <div style="font-size:32px;font-weight:700;color:var(--accent);line-height:1.2;margin-bottom:8px">65,742</div>
+          <div style="font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase">Users · One Explainer · 9 Leads</div>
+        </div>
+        <div style="border:1px solid var(--hair);border-radius:8px;overflow:hidden;background:#FAFAF8">
+          <img src="images/growth_demat.png" alt="Dematerialisation explainer impact" style="width:100%;height:auto;display:block" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span style=padding:20px;display:block;font-family:monospace;font-size:11px;color:var(--faint);text-align:center>growth_demat.png</span>')">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label">The Problem</div>
+    <p>EquityList's buyers — founders, CFOs, and HR leads — are solving equity problems in a market that's still new in India. The concepts are unfamiliar, so when a problem comes up, people search to understand it first. That made high-intent search the channel that mattered, and education the way in.</p>
+    <p>The job: rank for the searches the actual buyer makes — not employees, students, or retail traders — in a niche, still-maturing category against established players, and turn that into demand, not just traffic.</p>
+  </section>
+
+  <section>
+    <div class="sec-label">What I Built</div>
+    <p>A demand engine built on intent, not volume. I targeted keywords the real buyer would search, and went deep on single definitive explainers — betting that one comprehensive, authoritative post could own a result and outperform a hundred shallow ones.</p>
+    <p>The flagship: a complete, India-focused explainer on dematerialisation under MCA Rule 9b — a niche topic with real intent and almost no competition. It ranked to page one and became the largest single source of organic users on the site.</p>
+  </section>
+
+  <div class="pagenav">
+    <a href="project-ai-automation.html"><span class="dir">←</span>AI Automation</a>
+    <a class="nxt" href="project-mvp.html"><span class="dir">Next →</span>Product MVPs</a>
+  </div>
+
+</div>
+
+<script>
+  (function(){
+    var dd=document.getElementById('dd'),btn=document.getElementById('ddBtn');
+    btn.addEventListener('click',function(e){e.stopPropagation();var o=dd.classList.toggle('open');btn.setAttribute('aria-expanded',o);});
+    document.addEventListener('click',function(){dd.classList.remove('open');btn.setAttribute('aria-expanded',false);});
+  })();
+</script>
+
+</body>
+</html>

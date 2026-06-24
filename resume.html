@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résumé — Farheen Shaikh</title>
+<meta name="description" content="Résumé of Farheen Shaikh — Product Marketing Manager, fintech &amp; crypto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --display:"Geist",system-ui,sans-serif;
+    --body:"Geist",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --paper:#FFFFFF; --ink:#15141A; --muted:#5F5E66; --faint:#9C9BA3;
+    --hair:#E7E6E1; --hair2:#EFEEE9; --maxw:880px;
+    --accent:#15141A; --accent-bg:#F1EFE8; --accent-deep:#15141A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+
+  .mininav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .mininav .bar{max-width:var(--maxw);margin:0 auto;padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .mininav .home{font-family:var(--mono);font-size:13px;color:var(--ink);white-space:nowrap}
+  .mininav .home:hover{color:var(--muted)}
+  .mininav .right{display:flex;align-items:center;gap:8px}
+  .mininav .btn{font-family:var(--mono);font-size:12px;letter-spacing:.02em;padding:7px 14px;border:1px solid var(--ink);background:transparent;color:var(--ink);transition:.15s;cursor:pointer}
+  .mininav .btn:hover{background:var(--ink);color:#fff}
+  .mininav .btn.solid{background:var(--ink);color:#fff}
+  .mininav .btn.solid:hover{background:#000}
+  .dd{position:relative}
+  .dd .btn.toggle{display:inline-flex;align-items:center;gap:6px}
+  .dd .menu{position:absolute;top:calc(100% + 8px);right:0;min-width:210px;background:#fff;border:1px solid var(--hair);padding:6px;display:none;box-shadow:0 8px 28px rgba(0,0,0,.08)}
+  .dd.open .menu{display:block}
+  .dd .menu a{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);padding:9px 12px;white-space:nowrap;transition:.12s}
+  .dd .menu a:hover{background:var(--hair2);color:var(--ink)}
+  @media(max-width:560px){.mininav .btn.txt{display:none}}
+
+  header{padding:52px 0 8px}
+  .crumb{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:26px;display:flex;align-items:center;gap:8px}
+  .crumb a{color:var(--muted);transition:.15s}
+  .crumb a:hover{color:var(--ink)}
+  .crumb .sep{color:var(--hair)}
+  .crumb .cur{color:var(--ink)}
+
+  .id-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(2.1rem,5vw,3.1rem);letter-spacing:-.025em;line-height:1.05;margin-bottom:10px}
+  .role{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+  .contact{font-family:var(--mono);font-size:12.5px;color:var(--faint);display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:14px}
+  .contact a{color:var(--muted);transition:.15s}
+  .contact a:hover{color:var(--ink)}
+  .dl{font-family:var(--mono);font-size:12px;letter-spacing:.02em;padding:9px 16px;border:1px solid var(--ink);background:transparent;color:var(--ink);transition:.15s;cursor:pointer;white-space:nowrap}
+  .dl:hover{background:var(--ink);color:#fff}
+
+  .summary{font-size:18px;line-height:1.55;color:#2c2b33;max-width:64ch;padding:28px 0 36px;border-bottom:1px solid var(--hair)}
+
+  section{padding:36px 0;border-bottom:1px solid var(--hair2)}
+  section:last-of-type{border-bottom:none}
+  .sec-label{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--muted);margin-bottom:24px;text-transform:uppercase}
+
+  .job{margin-bottom:30px}
+  .job:last-child{margin-bottom:0}
+  .job .top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:3px}
+  .job .org{font-family:var(--display);font-size:1.15rem;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+  .job .when{font-family:var(--mono);font-size:11.5px;color:var(--faint);white-space:nowrap}
+  .job .title{font-size:14.5px;color:var(--muted);margin-bottom:2px}
+  .job .ctx{font-size:13px;color:var(--faint);font-style:italic;margin-bottom:12px}
+  .job ul{list-style:none;padding:0}
+  .job li{position:relative;padding-left:20px;font-size:15px;line-height:1.6;color:#2c2b33;margin-bottom:10px;max-width:72ch}
+  .job li:last-child{margin-bottom:0}
+  .job li::before{content:"";position:absolute;left:2px;top:9px;width:5px;height:5px;background:var(--ink);border-radius:50%}
+  .job li b{font-weight:600;color:var(--ink)}
+  .job li a{color:var(--ink);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--hair)}
+  .job li a:hover{text-decoration-color:var(--ink)}
+
+  .skills{font-size:15px;line-height:1.9;color:#2c2b33;max-width:72ch}
+  .edu p{font-size:15px;line-height:1.6;color:#2c2b33}
+  .edu .todo{font-family:var(--mono);font-size:12.5px;color:var(--faint)}
+
+  footer{border-top:1px solid var(--hair);padding:28px 0 56px;margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+  /* ---------- print / save-as-PDF ---------- */
+  @media print{
+    .mininav,.crumb,.dl,footer{display:none!important}
+    body{font-size:11pt;line-height:1.4}
+    .wrap{max-width:100%;padding:0}
+    header{padding:0 0 4pt}
+    h1{font-size:22pt}
+    .summary{font-size:11.5pt;padding:12pt 0 14pt}
+    section{padding:14pt 0;border-bottom:none}
+    .sec-label{margin-bottom:10pt}
+    .job{margin-bottom:14pt}
+    .job li{margin-bottom:4pt;font-size:10.5pt}
+    a{color:#000}
+    @page{margin:14mm}
+  }
+</style>
+</head>
+<body>
+<nav class="mininav">
+  <div class="bar">
+    <a class="home" href="index.html">⌂ Home</a>
+    <div class="right">
+      <div class="dd" id="dd">
+        <button class="btn toggle" type="button" id="ddBtn" aria-haspopup="true" aria-expanded="false">Projects ▾</button>
+        <div class="menu">
+          <a href="project-ai-automation.html">01 · AI Automation</a>
+          <a href="project-growth.html">02 · Growth &amp; Demand Gen</a>
+          <a href="project-mvp.html">03 · Product MVPs</a>
+          <a href="project-positioning.html">04 · Positioning</a>
+          <a href="project-engagement-retention.html">05 · Engagement &amp; Retention</a>
+        </div>
+      </div>
+      <a class="btn txt" href="read.html" target="_blank" rel="noopener">Read</a>
+      <a class="btn txt" href="mailto:28.shaikh.farheen@gmail.com">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header>
+    <nav class="crumb"><a href="index.html">Home</a> <span class="sep">/</span> <span class="cur">Résumé</span></nav>
+    <div class="id-row">
+      <div>
+        <h1>Farheen Shaikh</h1>
+        <div class="role">Product Marketing Manager · Fintech &amp; Crypto</div>
+        <div class="contact">
+          <span>Mumbai, India</span>
+          <a href="mailto:28.shaikh.farheen@gmail.com">28.shaikh.farheen@gmail.com</a>
+          <a href="https://www.linkedin.com/in/farheenshaikh28/" target="_blank" rel="noopener">linkedin.com/in/farheenshaikh28</a>
+        </div>
+      </div>
+      <button class="dl" type="button" onclick="window.print()">Download PDF ↓</button>
+    </div>
+  </header>
+
+  <p class="summary">A product marketer who ships product-grade GTM assets, not just copy. ~6 years across crypto and fintech, lately building live tools and AI systems that move buyers — positioning expressed through product, not slideware.</p>
+
+  <section>
+    <div class="sec-label">Experience</div>
+
+    <div class="job">
+      <div class="top">
+        <span class="org">EquityList</span>
+        <span class="when">Mar 2024 – Present</span>
+      </div>
+      <div class="title">Content Marketer</div>
+      <div class="ctx">Equity &amp; cap-table management SaaS for startups (India &amp; US)</div>
+      <ul>
+        <li>Built, solo, an <b>AI content-operations system</b> (Claude Code + Claude.ai) that runs planning, SEO analysis, lead attribution, and drafting — cutting quarterly planning from <b>3–4 days to ~1 day</b> and post drafting from <b>~2 days to ~4 hours</b>, at under 2 hrs/week upkeep. Encoded positioning into seven content-quality filters.</li>
+        <li>Built two <b>live product calculators</b> as GTM/conviction tools — a <a href="https://www.equitylist.co/safe-calculator" target="_blank" rel="noopener">SAFE &amp; dilution calculator</a> and an <a href="https://www.equitylist.co/roi-calculator" target="_blank" rel="noopener">ROI calculator</a> — end to end as a non-engineer, using AI dev tools. Modeling decisions doubled as positioning (e.g. equity admin as distributed cost, complexity-scaled retainers).</li>
+        <li>Led content marketing to <b>2,600 → 9,300 monthly organic clicks</b> (blog <b>1,840 → 7,623</b>); a single explainer drove <b>65,742 organic users and 9 inbound leads</b>; earned page-one rankings across a range of high-intent keywords (incl. "best cap table management software").</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="top">
+        <span class="org">Huddle01</span>
+        <span class="when">Sept 2023 – Dec 2023</span>
+      </div>
+      <div class="title">Product Marketing Manager (Contract)</div>
+      <div class="ctx">Decentralized communication network (web3)</div>
+      <ul>
+        <li>Built the SEO action plan and ads strategy for a pre-launch web3 product.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="top">
+        <span class="org">Mudrex</span>
+        <span class="when">Oct 2022 – Aug 2023</span>
+      </div>
+      <div class="title">Product Marketing Associate</div>
+      <div class="ctx">Crypto investing platform</div>
+      <ul>
+        <li>Led mobile-app engagement strategy across stories, blogs, video, and quizzes — <b>lifted 7-day retention 36%</b>; content drove <b>24% of app sessions</b> (stories 70% / quizzes 87% completion).</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="top">
+        <span class="org">Mudrex</span>
+        <span class="when">May 2022 – Oct 2022</span>
+      </div>
+      <div class="title">Content Strategist</div>
+      <ul>
+        <li>Overhauled the blog and led a team of writers: <b>200+ posts, ~300K monthly impressions</b>, top-4 rankings for target terms, blog average position improved 54 → 47.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="top">
+        <span class="org">CoinSwitch Kuber</span>
+        <span class="when">Jun 2020 – May 2022</span>
+      </div>
+      <div class="title">Associate Writer</div>
+      <div class="ctx">Crypto exchange</div>
+      <ul>
+        <li>Laid the foundation of the company blog and ran the YouTube channel — <b>grew subscribers 45K → 140K+ in 7 months</b>, top video 500K+ views (51% view-through, 5% CTR).</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-label">Skills</div>
+    <p class="skills">Positioning &amp; messaging · Go-to-market · SEO &amp; content strategy · Lead generation · Conviction tools / interactive content · AI-assisted building (Claude Code, AI dev tools) · Analytics &amp; attribution · Fintech &amp; crypto domain depth</p>
+  </section>
+
+  <section class="edu">
+    <div class="sec-label">Education</div>
+    <div class="job" style="margin-bottom:0">
+      <div class="top">
+        <span class="org">University of Mumbai</span>
+        <span class="when">2017 – 2020</span>
+      </div>
+      <div class="title">Bachelor of Management Studies (BMS)</div>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 Farheen Shaikh</span>
+    <span>Mumbai, India · 28.shaikh.farheen@gmail.com</span>
+  </footer>
+</div>
+
+<script>
+  (function(){
+    var dd=document.getElementById('dd'),btn=document.getElementById('ddBtn');
+    btn.addEventListener('click',function(e){e.stopPropagation();var o=dd.classList.toggle('open');btn.setAttribute('aria-expanded',o);});
+    document.addEventListener('click',function(){dd.classList.remove('open');btn.setAttribute('aria-expanded',false);});
+  })();
+</script>
+</body>
+</html>

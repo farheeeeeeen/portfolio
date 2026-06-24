@@ -1,0 +1,72 @@
+<svg viewBox="0 0 1200 1120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1120" fill="white"/>
+
+  <text x="60" y="50" font-family="Geist, system-ui" font-size="36" font-weight="700" fill="#15141A">EquityList Content System</text>
+  <text x="60" y="78" font-family="Geist, system-ui" font-size="16" fill="#5F5E66">Technical architecture — 4 layers of orchestration</text>
+
+  <rect x="40" y="120" width="1120" height="150" fill="#E1F5EE" stroke="#0F6E56" stroke-width="3" rx="8"/>
+  <text x="70" y="150" font-family="Geist, system-ui" font-size="13" font-weight="700" fill="#15141A" letter-spacing="0.06em">1) USER COMMANDS</text>
+  <text x="70" y="168" font-family="Geist, system-ui" font-size="13" fill="#5F5E66">Claude Code Skills — natural language triggers</text>
+  <text x="70" y="200" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">/categorize-blogs</text>
+  <text x="70" y="216" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">Blog inventory management</text>
+  <text x="340" y="200" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">/content-strategy</text>
+  <text x="340" y="216" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">Quarterly planning + competitor research</text>
+  <text x="70" y="245" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">/analyze-performance</text>
+  <text x="70" y="261" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">SEO metrics + lead attribution</text>
+  <text x="380" y="245" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">/new-blog-published</text>
+  <text x="380" y="261" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">Post-publish automation</text>
+
+  <rect x="40" y="290" width="1120" height="240" fill="#E6F1FB" stroke="#185FA5" stroke-width="3" rx="8"/>
+  <text x="70" y="320" font-family="Geist, system-ui" font-size="13" font-weight="700" fill="#15141A" letter-spacing="0.06em">2) ORCHESTRATION LAYER</text>
+  <text x="70" y="338" font-family="Geist, system-ui" font-size="13" fill="#5F5E66">Python Scripts + Claude Agents — data processing &amp; API coordination</text>
+  <text x="70" y="375" font-family="Geist, system-ui" font-size="12" font-weight="700" fill="#15141A" letter-spacing="0.05em">Scripts:</text>
+  <text x="70" y="395" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">fetch_gsc</text>
+  <text x="70" y="411" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">Google Search Console API</text>
+  <text x="270" y="395" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">fetch_analytics</text>
+  <text x="270" y="411" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">Plausible + HubSpot API</text>
+  <text x="520" y="395" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">fetch_competitors</text>
+  <text x="520" y="411" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">Semrush API</text>
+  <text x="800" y="395" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">sync_sheets</text>
+  <text x="800" y="411" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">Google Sheets reporting</text>
+  <text x="70" y="475" font-family="Geist, system-ui" font-size="12" font-weight="700" fill="#15141A" letter-spacing="0.05em">Agents:</text>
+  <text x="70" y="495" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">competitor-researcher</text>
+  <text x="70" y="511" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">Spawned by /content-strategy — analyzes market gaps, summarizes findings</text>
+
+  <rect x="40" y="550" width="1120" height="180" fill="#EEEDFE" stroke="#534AB7" stroke-width="3" rx="8"/>
+  <text x="70" y="580" font-family="Geist, system-ui" font-size="13" font-weight="700" fill="#15141A" letter-spacing="0.06em">3) DATA LAYER</text>
+  <text x="70" y="598" font-family="Geist, system-ui" font-size="13" fill="#5F5E66">Persistent State (JSON) → Reporting (CSV)</text>
+  <text x="70" y="635" font-family="Geist, system-ui" font-size="12" font-weight="700" fill="#15141A" letter-spacing="0.05em">Core Datasets:</text>
+  <text x="70" y="655" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">blog_inventory.json</text>
+  <text x="70" y="671" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">status, categories, publish history</text>
+  <text x="380" y="655" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">keyword_map.json</text>
+  <text x="380" y="671" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">research data, opportunities, gaps</text>
+  <text x="720" y="655" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">content_calendar.json</text>
+  <text x="720" y="671" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">planned pieces, deadlines, topics</text>
+  <text x="70" y="705" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">performance.json</text>
+  <text x="70" y="721" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">metrics, leads, attribution, ROI</text>
+  <text x="380" y="705" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">competitors.json</text>
+  <text x="380" y="721" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">competitor analysis, positioning gaps</text>
+
+  <rect x="40" y="750" width="1120" height="280" fill="#FAECE7" stroke="#993C1D" stroke-width="3" rx="8"/>
+  <text x="70" y="780" font-family="Geist, system-ui" font-size="13" font-weight="700" fill="#15141A" letter-spacing="0.06em">4) EXTERNAL INTEGRATIONS</text>
+  <text x="70" y="798" font-family="Geist, system-ui" font-size="13" fill="#5F5E66">Data sources (IN) and output destinations (OUT)</text>
+  <text x="70" y="840" font-family="Geist, system-ui" font-size="12" font-weight="700" fill="#15141A" letter-spacing="0.05em">Data Sources (Read):</text>
+  <text x="70" y="860" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">HubSpot</text>
+  <text x="70" y="876" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">deals, contacts, lead attribution</text>
+  <text x="280" y="860" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">Google Search Console</text>
+  <text x="280" y="876" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">search queries, impressions, clicks</text>
+  <text x="650" y="860" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">Plausible Analytics</text>
+  <text x="650" y="876" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">page views, events, user behavior</text>
+  <text x="70" y="910" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">Semrush API</text>
+  <text x="70" y="926" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">keyword volumes, difficulty, competitor keywords</text>
+  <text x="380" y="910" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">Webflow API</text>
+  <text x="380" y="926" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">blog metadata, categories, published posts</text>
+  <text x="720" y="910" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">Google Sheets API</text>
+  <text x="720" y="926" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">shared reporting, stakeholder dashboards</text>
+  <text x="70" y="975" font-family="Geist, system-ui" font-size="12" font-weight="700" fill="#15141A" letter-spacing="0.05em">Output Destination (Write):</text>
+  <text x="70" y="995" font-family="IBM Plex Mono, monospace" font-size="12" fill="#15141A">WordPress CMS</text>
+  <text x="70" y="1011" font-family="Geist, system-ui" font-size="11" fill="#5F5E66">Publish blog posts → live on EquityList blog</text>
+
+  <rect x="40" y="1060" width="1120" height="40" fill="white" stroke="#E7E6E1" stroke-width="1" rx="6"/>
+  <text x="70" y="1085" font-family="Geist, system-ui" font-size="11" fill="#5F5E66"><tspan font-weight="600">How it works:</tspan> Skills trigger scripts → scripts fetch data from sources → processed data stored → dashboards updated → users get insights</text>
+</svg>

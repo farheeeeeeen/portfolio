@@ -1,0 +1,16 @@
+_archive/
+.DS_Store
+**/.DS_Store
+
+# Heavy source assets — keep local, never commit (web-ready versions live in images/)
+images/safe_calculator.gif
+images/engagement.jpg
+images/engagement_coins_email.png
+images/positioning_carta_alternative.png
+images/positioning_finance.png
+images/positioning_hr.png
+images/positioning_qapita_alternative.png
+
+# Calculator demo videos (original GIFs are very large)
+*.gif
+images/Incorporation-Report-20260601.xlsx
