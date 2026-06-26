@@ -37,7 +37,7 @@ Everything still to finish before sharing the link with hiring managers. Grouped
 
 ## 🟡 Content to add / confirm
 
-- [ ] **Confirm the 65,742 figure** against Search Console (Master Spec also shows 65,550). Used on the Growth page and the homepage Growth card — must match. Pick the verified number and update both.
+- [x] **Explainer figure settled at 65,582** (was 65,742 / 65,550 in earlier docs). Growth page, homepage card, and resume now all show 65,582. The "9 inbound leads" claim was removed from the explainer (kept only 65,582 users + page-one rankings).
 - [ ] **SAFE calculator Impact** — currently shows "live + ungated" (no usage numbers). Add report-download / lead / traffic numbers if you have them, or leave as-is (legitimate for a conviction tool).
 - [ ] **ROI calculator Impact** — same; coverage stat (4/5/2) is in, usage numbers optional.
 - [ ] **Positioning annotated screenshots** — the four cards (Carta, Qapita, HR, Finance) each have a full-width screenshot slot. These should be the live pages **with annotations** marking the positioning choices. (Upload the 4 page screenshots → Claude can produce annotated versions.)

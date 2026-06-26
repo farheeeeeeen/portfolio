@@ -98,7 +98,7 @@ Don't upload the `_archive/` folder to the public repo at all — it holds the o
 - [ ] Real blog/X/LinkedIn/GitHub URLs filled in (search for `href="#"` and replace)
 - [ ] `28.shaikh.farheen@gmail.com` is the email you want public
 - [ ] The "See it live / See the code" links on project pages point to the right URLs
-- [ ] Confirm the 65,742 figure against Search Console (used on Growth page + homepage)
+- [x] Explainer figure settled at 65,582 (Growth page + homepage + resume aligned)
 - [ ] Open every page once on desktop and once on a phone
 - [ ] `.nojekyll` added; `_archive/` not uploaded
 
