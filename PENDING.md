@@ -2,70 +2,57 @@
 
 Everything still to finish before sharing the link with hiring managers. Grouped by priority.
 
----
-
-## 🔴 Blockers (site has dead links / missing pages until these are done)
-
-- [ ] **Build `resume.html`** — the Résumé button on every page points here; it doesn't exist yet. (Ask Claude to build it from the resume copy in the Master Spec / resume draft.)
-- [ ] **Add the 5 homepage card images** to `images/`:
-  - `ai-automation.png`
-  - `calculators.png`
-  - `growth.png`
-  - `positioning.png`
-  - `engagement.png`
-- [ ] **Add the 6 project hero images** to `images/`:
-  - `ai-automation-hero.png`
-  - `growth-hero.png`
-  - `safe-hero.png`
-  - `roi-hero.png`
-  - `engagement-hero.png`
-  - `coins-hero.png`
-  *(Positioning uses annotated screenshots inside its cards rather than a single hero — see below.)*
+_Last audited against the files on disk: 2026-08-18._
 
 ---
 
-## 🟠 Real links to fill (currently placeholder `#`)
+## 🔴 Blockers (dead links on live pages)
 
-- [ ] **X / Twitter URL** — homepage social links (`index.html`, lines ~141)
-- [ ] **GitHub URL** — homepage social links (`index.html`, line ~142)
-- [ ] **AI Automation "See the code →"** — point to the GitHub repo for the content-ops system (`project-ai-automation.html`)
-- [ ] **Positioning "See them live →"** — point to one of the live EquityList pages, or the solutions hub (`project-positioning.html`)
-- [ ] **Read button** — already points to `read.html` ✓ (no action)
-- [ ] **SAFE / ROI "See it live →"** — already point to the real equitylist.co calculator URLs ✓ (verify they're correct)
+- [ ] **AI Automation "See the code →"** — `project-ai-automation.html:156`, still `href="#"`. Point it at the GitHub repo for the content-ops system, or delete the link. **This is the only dead link left on the site.**
 
 ---
 
-## 🟡 Content to add / confirm
+## 🟠 Content to add / confirm
 
-- [x] **Explainer figure settled at 65,582** (was 65,742 / 65,550 in earlier docs). Growth page, homepage card, and resume now all show 65,582. The "9 inbound leads" claim was removed from the explainer (kept only 65,582 users + page-one rankings).
-- [ ] **SAFE calculator Impact** — currently shows "live + ungated" (no usage numbers). Add report-download / lead / traffic numbers if you have them, or leave as-is (legitimate for a conviction tool).
-- [ ] **ROI calculator Impact** — same; coverage stat (4/5/2) is in, usage numbers optional.
-- [ ] **Positioning annotated screenshots** — the four cards (Carta, Qapita, HR, Finance) each have a full-width screenshot slot. These should be the live pages **with annotations** marking the positioning choices. (Upload the 4 page screenshots → Claude can produce annotated versions.)
-- [ ] **Real writing pieces** — replace the two template entries in `read.html` with real pieces. For "Read here" essays, build them from `writing/_template.html`. Delete the dashed placeholder note once done.
-- [ ] **Project screenshots/illustrations inside pages** — each project page has inline `[ screenshot ]` / `[ illustration ]` slots (e.g. AI system architecture diagram, calculator progressive shots, the four engagement formats). Add real images.
+- [ ] **More writing pieces.** `read.html` currently lists one real essay (the SAFE calculator build). The External slot is empty — the obvious candidate is the dematerialisation / MCA Rule 9b explainer (65,582 organic users). Needs its live URL to wire in.
+- [ ] **Iteration 1 vs Iteration 2 screenshots** for the SAFE essay. The draft originally referenced before/after screenshots that aren't in the repo; those sentences were reworded to stand on their own. If the screenshots exist, drop them in `writing/images/` and the before/after section can be restored to its stronger form.
+- [ ] **Positioning annotated screenshots** — the four cards (Carta, Qapita, HR, Finance) currently show clean page screenshots. Annotating them to mark the positioning choices would make the argument visible rather than implied.
+- [ ] **SAFE calculator Impact** — shows "live + ungated" with no usage numbers. Add report-download / traffic figures if available, or leave as-is (defensible for a conviction tool).
+- [ ] **ROI calculator Impact** — same; the coverage stat (4/5/2) is in, usage numbers optional.
+- [ ] **Remaining inline image slots** on project pages (AI system architecture diagram, the four engagement formats). Any slot without a file renders its filename in mono type, which reads as deliberate rather than broken — so these are upgrades, not blockers.
 
 ---
 
 ## 🟢 Polish / nice-to-have
 
-- [ ] **Calculator "watch it work" loops** — short silent WebP/MP4 loops for SAFE/ROI (see DEPLOY.md for how to handle video on GitHub Pages).
-- [ ] **Compress every image** to 150–400 KB before committing (TinyPNG / Squoosh).
+- [ ] **Repo weight.** `images/safe_calculator.mp4` (8.1 MB) and `images/roi_calculator.mp4` (11 MB) are the two heaviest tracked files, ~19 MB of a small repo. Re-encode smaller (lower bitrate / shorter loop) if first-load feels slow on mobile.
 - [ ] **Review every image** for sensitive EquityList data (customer names, revenue, unreleased features) — crop/blur as needed.
 - [ ] **Custom domain** (optional) — e.g. farheenshaikh.com via Settings → Pages.
-- [ ] **Test on mobile** — open every page on a phone once.
+- [ ] **Test on mobile + a slow connection** — open every page on a phone once. This is the worst-case reader.
 - [ ] **Favicon** — add a small `favicon.ico` or icon link if you want one in the browser tab.
+- [ ] **Confirm GitHub Pages is enabled** — Settings → Pages → `main` / `(root)`, then load https://farheeeeeeen.github.io/portfolio/.
 
 ---
 
 ## ✅ Done
 
 - [x] Homepage — 5 category cards, restrained design, Geist + IBM Plex Mono
-- [x] All 7 project pages built with locked copy + category accents
+- [x] All 5 hub pages built with locked copy + category accents
+- [x] `resume.html` built
 - [x] Positioning page — full-width expanding cards
-- [x] Read list page + individual article template + example
+- [x] Homepage card images in place (`ai-automation.svg`, `calculators.webp`, `growth.png`, `positioning.png`, `engagement.webp`)
+- [x] Hero images — **removed site-wide by design.** Don't reintroduce them.
+- [x] Calculator demo loops — `safe_calculator.mp4` + `roi_calculator.mp4` live on `project-mvp.html` (GIF originals stay local, gitignored)
+- [x] Heavy source assets compressed to WebP and originals gitignored (verified untracked: the 44 MB and 28 MB GIFs, `Incorporation-Report-20260601.xlsx`)
 - [x] Consistent nav — breadcrumb, sticky Home + Projects dropdown + Contact/Read/Résumé
-- [x] Prev/next navigation chained across all 7 projects
 - [x] Responsive (desktop → mobile) + reduced-motion + keyboard focus
+- [x] Homepage socials wired (LinkedIn, X, GitHub)
+- [x] SAFE / ROI "See it live →" point at the real `www.equitylist.co` URLs
+- [x] Positioning "See them live →" placeholder removed (commit `b9e4b2a`) — it is no longer a dead link
+- [x] Résumé retention label verified correct — `resume.html` says "lifted 30-day retention 36%". (The earlier note that the résumé still had 7-day/30-day swapped is out of date.)
+- [x] First real writing piece published (`writing/building-a-safe-calculator-with-ai.html`); placeholder `example-piece.html` deleted and the dashed placeholder note removed from `read.html`
+- [x] `writing/_template.html` nav fixed — it pointed at four project pages that never existed (`project-safe`, `project-roi`, `project-engagement`, `project-coins`)
+- [x] Explainer figure settled at 65,582; "9 inbound leads" removed everywhere and not to be reintroduced
 - [x] DEPLOY.md (GitHub Pages + image/video handling)
 - [x] MAINTENANCE.md (how to update everything)
 
@@ -77,3 +64,4 @@ Everything still to finish before sharing the link with hiring managers. Grouped
 - Keep **commit messages neutral** (no "job hunt", "applying", etc.).
 - Nothing in **images, filenames, or copy** should signal you're actively looking.
 - Don't upload `_archive/` to the public repo.
+- Only `portfolio_site/` is ever published. The parent folder stays local.

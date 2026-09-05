@@ -56,12 +56,23 @@
   .body li::before{content:"—";position:absolute;left:0;color:var(--faint)}
   .body a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--hair)}
   .body a:hover{text-decoration-color:var(--ink)}
+  .body b,.body strong{font-weight:600}
+  code{font-family:var(--mono);font-size:.88em;background:var(--hair2);padding:1px 5px;border-radius:2px}
   blockquote{margin:36px 0;padding:6px 0 6px 26px;border-left:3px solid var(--ink);
     font-family:var(--display);font-size:1.45rem;line-height:1.35;font-weight:500;letter-spacing:-.01em;color:var(--ink)}
   blockquote cite{display:block;margin-top:12px;font-family:var(--mono);font-size:12px;font-weight:400;font-style:normal;color:var(--faint);letter-spacing:.04em}
+  /* a verbatim prompt / spec block — mono, panelled, deliberately not a pull-quote */
+  .spec{margin:32px 0;padding:22px 24px;background:#FAFAF8;border:1px solid var(--hair);
+    font-family:var(--mono);font-size:13.5px;line-height:1.65;color:#33323a}
+  .spec p{margin-bottom:14px;color:inherit}
+  .spec p:last-child{margin-bottom:0}
+  .spec ul{margin:0 0 14px 0;list-style:none;padding-left:0}
+  .spec li{padding-left:18px;margin-bottom:6px;color:inherit}
+  .spec li::before{content:"·";position:absolute;left:4px;color:var(--faint)}
+  .spec .lbl{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
   figure{margin:36px 0}
   figure .frame{border:1px solid var(--hair);background:#FAFAF8;min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-  figure img{width:100%;height:auto;display:block}
+  figure img,figure video{width:100%;height:auto;display:block}
   figure .ph{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.04em;text-align:center;padding:0 20px}
   figcaption{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:10px;line-height:1.5}
   .pagenav{display:flex;justify-content:space-between;gap:16px;padding:48px 0 56px;margin-top:44px;border-top:1px solid var(--hair)}
@@ -83,11 +94,9 @@
         <div class="menu">
           <a href="../project-ai-automation.html">01 · AI Automation</a>
           <a href="../project-growth.html">02 · Growth &amp; Demand Gen</a>
-          <a href="../project-safe.html">03 · SAFE Calculator</a>
-          <a href="../project-roi.html">04 · ROI Calculator</a>
-          <a href="../project-positioning.html">05 · Positioning</a>
-          <a href="../project-engagement.html">06 · Engagement &amp; Retention</a>
-          <a href="../project-coins.html">07 · Coins Campaign</a>
+          <a href="../project-mvp.html">03 · Product MVPs</a>
+          <a href="../project-positioning.html">04 · Positioning</a>
+          <a href="../project-engagement-retention.html">05 · Engagement &amp; Retention</a>
         </div>
       </div>
       <a class="btn txt" href="../read.html">Read</a>

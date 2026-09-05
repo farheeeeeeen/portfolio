@@ -109,17 +109,15 @@ Once it's on GitHub Pages (see DEPLOY.md), every push to the `main` branch auto-
 ```
 index.html                  homepage (5 category cards)
 read.html                   writing list
-resume.html                 résumé (TO BUILD)
-project-ai-automation.html  ┐
-project-growth.html         │
-project-safe.html           │ seven project pages
-project-roi.html            │ (standard template, except
-project-positioning.html    │  positioning = expanding grid)
-project-engagement.html     │
-project-coins.html          ┘
+resume.html                 résumé
+project-ai-automation.html  ┐ 01 · teal   #0F6E56
+project-growth.html         │ 02 · blue   #185FA5
+project-mvp.html            │ 03 · coral  #993C1D  (2 pcards: SAFE, ROI)
+project-positioning.html    │ 04 · plum   #534AB7  (4 pcards)
+project-engagement-retention.html ┘ 05 · sand #854F0B  (2 pcards)
 writing/
   _template.html            article template (copy per piece)
-  example-piece.html        sample (linked from read.html)
+  building-a-safe-calculator-with-ai.html   essay (linked from read.html)
   README.txt                how-to
   images/                   article images (create as needed)
 images/                     all screenshots + card/hero images

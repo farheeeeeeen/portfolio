@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building a SAFE Calculator with AI, as a Product Marketer — Farheen Shaikh</title>
+<meta name="description" content="How I built and shipped a live SAFE and priced-round dilution calculator for EquityList as a product marketer, using ChatGPT, Google AI Studio, Antigravity, and v0.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --display:"Geist",system-ui,sans-serif;
+    --body:"Geist",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --paper:#FFFFFF; --ink:#15141A; --muted:#5F5E66; --faint:#9C9BA3;
+    --hair:#E7E6E1; --hair2:#EFEEE9; --maxw:720px;
+    --accent:#993C1D; --accent-bg:#FAECE7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  a{color:inherit}
+  /* sticky nav (uses ../ because this page sits in /writing) */
+  .mininav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .mininav .bar{max-width:840px;margin:0 auto;padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .mininav .home{font-family:var(--mono);font-size:13px;color:var(--ink);white-space:nowrap;text-decoration:none}
+  .mininav .home:hover{color:var(--muted)}
+  .mininav .right{display:flex;align-items:center;gap:8px}
+  .mininav .btn{font-family:var(--mono);font-size:12px;letter-spacing:.02em;padding:7px 14px;border:1px solid var(--ink);background:transparent;color:var(--ink);transition:.15s;cursor:pointer;text-decoration:none}
+  .mininav .btn:hover{background:var(--ink);color:#fff}
+  .mininav .btn.solid{background:var(--ink);color:#fff}
+  .dd{position:relative}
+  .dd .btn.toggle{display:inline-flex;align-items:center;gap:6px}
+  .dd .menu{position:absolute;top:calc(100% + 8px);right:0;min-width:210px;background:#fff;border:1px solid var(--hair);padding:6px;display:none;box-shadow:0 8px 28px rgba(0,0,0,.08)}
+  .dd.open .menu{display:block}
+  .dd .menu a{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);padding:9px 12px;white-space:nowrap;text-decoration:none;transition:.12s}
+  .dd .menu a:hover{background:var(--hair2);color:var(--ink)}
+  @media(max-width:560px){.mininav .btn.txt{display:none}}
+  /* article */
+  article{padding:52px 0 0}
+  .crumb{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:30px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .crumb a{color:var(--muted);text-decoration:none;transition:.15s}
+  .crumb a:hover{color:var(--ink)}
+  .crumb .sep{color:var(--hair)}
+  .crumb .cur{color:var(--ink)}
+  .pmeta{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--faint);margin-bottom:16px;text-transform:uppercase}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(2rem,5vw,2.9rem);letter-spacing:-.025em;line-height:1.08;margin-bottom:20px}
+  .standfirst{font-size:1.3rem;line-height:1.5;color:var(--muted);margin-bottom:36px;padding-bottom:36px;border-bottom:1px solid var(--hair)}
+  .body p{margin-bottom:24px;color:#23222a}
+  .body h2{font-family:var(--display);font-weight:600;font-size:1.5rem;letter-spacing:-.015em;margin:44px 0 16px;line-height:1.2}
+  .body h3{font-family:var(--display);font-weight:600;font-size:1.2rem;margin:32px 0 12px}
+  .body ul,.body ol{margin:0 0 24px 0;padding-left:0;list-style:none}
+  .body li{position:relative;padding-left:24px;margin-bottom:12px;color:#23222a}
+  .body li::before{content:"—";position:absolute;left:0;color:var(--faint)}
+  .body a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--hair)}
+  .body a:hover{text-decoration-color:var(--ink)}
+  .body b,.body strong{font-weight:600}
+  code{font-family:var(--mono);font-size:.88em;background:var(--hair2);padding:1px 5px;border-radius:2px}
+  blockquote{margin:36px 0;padding:6px 0 6px 26px;border-left:3px solid var(--ink);
+    font-family:var(--display);font-size:1.45rem;line-height:1.35;font-weight:500;letter-spacing:-.01em;color:var(--ink)}
+  blockquote cite{display:block;margin-top:12px;font-family:var(--mono);font-size:12px;font-weight:400;font-style:normal;color:var(--faint);letter-spacing:.04em}
+  /* a verbatim prompt / spec block — mono, panelled, deliberately not a pull-quote */
+  .spec{margin:32px 0;padding:22px 24px;background:#FAFAF8;border:1px solid var(--hair);
+    font-family:var(--mono);font-size:13.5px;line-height:1.65;color:#33323a}
+  .spec p{margin-bottom:14px;color:inherit}
+  .spec p:last-child{margin-bottom:0}
+  .spec ul{margin:0 0 14px 0;list-style:none;padding-left:0}
+  .spec li{padding-left:18px;margin-bottom:6px;color:inherit}
+  .spec li::before{content:"·";position:absolute;left:4px;color:var(--faint)}
+  .spec .lbl{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  figure{margin:36px 0}
+  figure .frame{border:1px solid var(--hair);background:#FAFAF8;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  figure img,figure video{width:100%;height:auto;display:block}
+  figure .ph{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.04em;text-align:center;padding:0 20px}
+  figcaption{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:10px;line-height:1.5}
+  .pagenav{display:flex;justify-content:space-between;gap:16px;padding:48px 0 56px;margin-top:44px;border-top:1px solid var(--hair)}
+  .pagenav a{font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:none;transition:.15s;display:flex;flex-direction:column;gap:4px}
+  .pagenav a:hover{color:var(--ink)}
+  .pagenav .dir{font-size:11px;color:var(--faint)}
+  .pagenav .nxt{text-align:right}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+</style>
+</head>
+<body>
+<nav class="mininav">
+  <div class="bar">
+    <a class="home" href="../index.html">⌂ Home</a>
+    <div class="right">
+      <div class="dd" id="dd">
+        <button class="btn toggle" type="button" id="ddBtn" aria-haspopup="true" aria-expanded="false">Projects ▾</button>
+        <div class="menu">
+          <a href="../project-ai-automation.html">01 · AI Automation</a>
+          <a href="../project-growth.html">02 · Growth &amp; Demand Gen</a>
+          <a href="../project-mvp.html">03 · Product MVPs</a>
+          <a href="../project-positioning.html">04 · Positioning</a>
+          <a href="../project-engagement-retention.html">05 · Engagement &amp; Retention</a>
+        </div>
+      </div>
+      <a class="btn txt" href="../read.html">Read</a>
+      <a class="btn txt" href="mailto:28.shaikh.farheen@gmail.com">Contact</a>
+      <a class="btn solid" href="../resume.html">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <article>
+    <nav class="crumb"><a href="../index.html">Home</a> <span class="sep">/</span> <a href="../read.html">Read</a> <span class="sep">/</span> <span class="cur">Building a SAFE Calculator with AI</span></nav>
+
+    <div class="pmeta">Essay · June 2026 · 21 min read</div>
+    <h1>Building a SAFE Calculator with AI, as a Product Marketer</h1>
+    <p class="standfirst">The honest version of how I shipped a live SAFE and priced-round dilution calculator using AI tools: the prompts, the things that broke, the calls I got wrong, and the part where a colleague had to bail me out.</p>
+
+    <div class="body">
+      <p>I am a product marketer. I do not write production code for a living. Over the last few weeks I built and shipped a SAFE and priced-round dilution calculator for EquityList, end to end, using AI tools. The calculator is live at <a href="https://www.equitylist.co/safe-calculator" target="_blank" rel="noopener">equitylist.co/safe-calculator</a>.</p>
+
+      <p>It is not a hype post about AI replacing engineers. It is a record of what the boundary actually looks like in late 2026, written by someone who walked it.</p>
+
+      <p>I am writing this for two reasons. The first is that the most useful posts I read while doing this were from people who were honest about where AI ended and human judgment had to begin. The second is that the standard product-marketer arc, which is to brief someone else and review what they produce, is no longer the only arc available. If you are a marketer and you have been thinking about whether you could ship a functional product yourself, the answer is yes, with caveats, and the caveats are the interesting part.</p>
+
+      <h2>The workflow that actually shipped this</h2>
+
+      <p>The tools were ChatGPT, Google AI Studio, Antigravity, and a brief detour through Vercel's v0. None of them did the work cleanly on their own. The interesting thing is the order I used them in and the specific reasons I moved between them.</p>
+
+      <h3>ChatGPT, for working out the logic before any code existed</h3>
+
+      <p>The SAFE conversion math is small in absolute terms but full of branches. My first job was to make the branches explicit. I used ChatGPT for this, the way I would use a whiteboard with a patient colleague who happens to have read every Y Combinator document. I would describe a scenario in plain English, ask for the conversion math, then push back on whatever the model produced.</p>
+
+      <p>The thing it got wrong most often was the share base for cap-based pricing. The cap-based price is the valuation cap divided by some share count, and the share count is not the same for pre-money and post-money SAFEs. ChatGPT would routinely use the same share base for both, which produces wrong numbers in any scenario with both kinds of SAFEs on the cap table. I caught it because the post-money SAFE in my test cases was issuing too few shares relative to what I would expect from a $1M-on-$5M-cap SAFE. The fix was to be explicit in the prompt: pre-money SAFEs apply the cap to a share base that excludes other SAFE dilution; post-money SAFEs apply the cap to a share base that includes it. Once I started writing prompts at that level of specificity, the math came out right.</p>
+
+      <p>The other thing the model got wrong, repeatedly, was MFN inheritance. I would ask "how does MFN work" and get a generic answer about MFN inheriting better terms. I had to specify the direction: MFN looks forward, not backward, because at the time the MFN clause was signed the earlier SAFEs were already in the past. MFN compares against subsequent SAFEs only. Until I wrote that constraint into the prompt, the model would happily generate code that walked the entire SAFE list bidirectionally.</p>
+
+      <p>The thing I want to flag here is that I am describing prompt engineering, not financial modeling. The financial modeling I had done in my head before opening ChatGPT. What ChatGPT bought me was the speed of converting that mental model into a written specification and then into JavaScript. The model is not where the thinking happened. The model is where the typing happened.</p>
+
+      <h3>Google AI Studio, for the first working version</h3>
+
+      <p>I moved into Google AI Studio once I had the conversion logic specified well enough to describe in a single long prompt. AI Studio gave me a full working calculator from that prompt: input fields for the existing cap table, a SAFEs section, a priced round configuration block, and a results panel with a chart. The first version was rougher than what I eventually shipped, but it ran, and the math was approximately correct on simple cases.</p>
+
+      <p>I stayed in AI Studio for a few days of iteration, mostly fixing edge cases and tightening the UI. This is where the design progression started. AI Studio is fast for "make this section look like a card" or "move the chart above the table" type changes. It is the right tool for shaping a product that already exists rather than building one from scratch.</p>
+
+      <p>The reason I left is specific and worth recording. After enough iterations, AI Studio started changing things I had not asked it to change. I would ask for a copy edit on a single label and it would silently restructure the results panel. I would ask for a fix to the option pool input and it would rewrite the SAFE conversion function. The longer I worked in the same project, the more the model's idea of "the codebase" drifted away from what was actually on screen. Past a certain point I could not predict what a small request would touch, and I stopped trusting the diffs.</p>
+
+      <p>This is, I think, a real limit of the current generation of in-IDE AI tools. They are excellent until the project gets long enough that they start hallucinating their own context. I do not know how to fix it from the user side. The thing I did was leave.</p>
+
+      <h3>Antigravity, where the work got finished</h3>
+
+      <p>I moved the codebase into Antigravity once it was complex enough that the AI Studio behaviour got in the way. Antigravity gave me proper files (<code>index.html</code>, <code>index.js</code>, the chart logic in a separate <code>ai_advisor_snippet.js</code>), the ability to view and grep across them, and a more disciplined sense of what was being edited on each turn. This is where most of the polish happened: the empty states, the input validation, the PDF report data structure, the formatting cleanup, the bug fixes.</p>
+
+      <p>I want to give a concrete example of how a prompt to Antigravity actually looked, because the version in my head before doing this work was much more conversational than the version that actually shipped things. The prompt that finally standardized the display of empty and not-yet-computable values across the calculator was this:</p>
+
+      <div class="spec">
+        <span class="lbl">Prompt, verbatim</span>
+        <p>"The calculator currently displays inconsistent default states for numeric values across cards, tables, and outputs (mix of 0, $0, $0.00, —). This task is to standardize how default / unset / not-applicable numeric values are displayed, without changing any calculations or data logic.</p>
+        <p>If an input is user-editable and numeric:</p>
+        <ul>
+          <li>Quantity / shares → 0</li>
+          <li>Money → $0</li>
+          <li>Percentage → 0% (percent symbol inside the input)</li>
+        </ul>
+        <p>There are two kinds of percentage fields in your calculator. Percentage inputs where % is part of the UI design (DiscountPercentage, TargetOptionPool) — here, the % symbol is already rendered in the input, the user types only the numeric value, default must be 0 (not 0%, not 0.0%).</p>
+        <p>If a value is not yet computable, awaiting required inputs, or conditionally applicable, then display: —"</p>
+      </div>
+
+      <p>That is not a conversation. It is a specification. It tells the model exactly what to do, exactly what not to touch ("without changing any calculations or data logic"), and exactly how to handle the edge cases. The successful prompts in this project all looked like this. The failed ones were the ones where I asked for something casually and assumed the model would figure out the constraints.</p>
+
+      <p>Antigravity also produced the most visceral error of the project. At one point I asked it to fix the <code>ai_advisor_snippet.js</code>, the file that generated the natural-language results summary. The fix touched a function it should not have touched, and the calculator stopped producing valid output. My next message to it was three words: "you broke the calculator." It backed out the change. I learned to ask "is this working as expected?" between substantive edits, and to keep a running mental note of which files were stable and which had been recently touched.</p>
+
+      <p>If I were starting again, I would skip AI Studio entirely once I knew the project was going to take more than a day or two of iteration. The faster I get into a tool that gives me real files to grep and a real diff to inspect, the less time I spend untangling drift.</p>
+
+      <h3>v0, for the design I would not have come up with on my own</h3>
+
+      <p>By the time I had Iteration 1 working, I knew it was wrong, but I did not know in what direction to fix it. Iteration 1 looked like a tax form. Everything was stacked vertically. The cap table was a table. The SAFEs were a table. The results were under the inputs, which meant the only way to see how a change affected an outcome was to fill out the entire form, scroll down, look at the answer, scroll back up, change one number, and scroll back down. I knew this was a bad experience. I did not know what to replace it with.</p>
+
+      <p>I am not a designer. I have opinions about good design but I do not have the vocabulary or the muscle memory to produce it. The thing I had previously done in this situation was hire a freelancer or brief a designer at the company. The thing I did this time was open v0 and ask it to design a SAFE calculator.</p>
+
+      <p>What v0 produced was the layout I eventually shipped. Inputs on the left, results on the right, both updating live. A donut chart for the ownership split with the legend showing each shareholder's percentage on the side. A small bar chart for founder dilution with a "before" and "after" bar next to each other. Headline numbers at the top of the results column in large type, with the dilution figure in red and the ownership figure in a brand colour. Coloured tags next to entries that needed categorisation (SAFE type, pool top-up indicator). The entire visual grammar of Iteration 2 came from a single afternoon in v0.</p>
+
+      <p>I did not ship v0's code. The HTML and class structure v0 produced did not match what was already in my Antigravity codebase, and porting it would have meant rebuilding half the calculator. What I did instead was take screenshots of the v0 output and use them as a reference back in AI Studio and Antigravity. The prompts were unglamorous: "make the layout split-screen, inputs on the left, results on the right, live-updating." "Replace the ownership table with a donut chart with the legend on the right." "Put the headline numbers at the top of the results column in large type." Each one was a small request. The result of all of them together was the visible jump from Iteration 1 to Iteration 2.</p>
+
+      <p>This is the part of the project I am most uncertain about how to talk about. On one hand, I designed nothing. v0 designed it, and I copied the design back into my codebase by describing what I saw. On the other hand, the decision to use v0 as a design reference, the judgment to know which of v0's choices were good and which were AI defaults to discard, and the work of getting AI Studio and Antigravity to reproduce the layout in the actual codebase, those were all me. I do not know what to call this kind of work. It is not design in the traditional sense and it is not engineering, but it is the activity that produced the version of the calculator that people are using.</p>
+
+      <p>One specific element I did remove from the v0-inspired design was an "AI Equity Advisor" panel that v0 included in its layout. The panel was a coloured box at the bottom of the results that displayed a natural-language summary of the scenario ("You are modeling a Series A round raising $200,000 at a $2,000,000 pre-money valuation. Founder ownership changes from 90.0% to 69.4% post-round."). I built the panel and shipped an internal version with it. Then I removed it, for two reasons. The text was generated by a deterministic template that filled in the variables. There was no model behind it. Labeling that "AI" was a small dishonesty that would compound over time. The second reason was that the panel was filling space, not adding information. The numbers it summarised were already on screen in larger type. I replaced it with a plain "Round summary" header and the same content, and lost nothing.</p>
+
+      <p>This was the only design call from v0 that I overrode. Everything else, I kept.</p>
+
+      <h3>The handoff: vanilla to React</h3>
+
+      <p>The version I built and shipped to internal review was vanilla HTML, CSS, and JavaScript. Three files. No framework, no build step. That is what the AI tools produced and what I was comfortable shipping.</p>
+
+      <p>The version that is live on the marketing site is React. The reason is the embed. The calculator lives inside the EquityList Webflow page, and the developer who owns the Webflow site needed it in React to embed it cleanly with the rest of the page architecture. So my vanilla version got converted to React as part of the embed work. I did not write the React. I wrote the calculator that the React wraps.</p>
+
+      <p>This is the most honest version of "I shipped a working tool." The calculator math, the UI logic, the PDF report data structure, the edge case handling, the empty states, the validation, all of that is mine, generated through AI tools and refined through review. The framework wrapper that makes it embed cleanly is not. Neither is the backend that generates the PDF and sends the email. Those endpoints live on <code>app.equitylist.co</code> and were wired up by an engineer on the team.</p>
+
+      <p>I want to be clear about the boundary because the LinkedIn version of this story is "marketer ships product solo" and that is not what happened. What happened is that an AI-assisted marketer can now produce the bulk of a working tool, and the residual engineering work to make it production-ready is smaller than it used to be, but it is not zero. The honest framing is collaboration where the ratio has shifted, not solo shipping.</p>
+
+      <h2>What I underestimated, in order</h2>
+
+      <p>Three things took dramatically longer than I expected.</p>
+
+      <p>First, <b>specifying the model in English well enough for the AI to translate it into correct code</b>. The financial logic of a SAFE conversion is not complicated in absolute terms. It is the standard YC mechanic: a SAFE converts at the lowest of three possible prices (cap-based, discounted, or the round price itself), and the share base used for the cap differs depending on whether the SAFE is pre-money or post-money. I could write that paragraph in five minutes. But to get ChatGPT to produce JavaScript that handled it without subtle errors, I had to write something closer to a specification document. What counts as the share base for the cap calculation? Does the share base include the option pool top-up or not? Does it include earlier SAFE shares? If there are three SAFEs with different cap structures, in what order do they resolve, and does that order matter? I had to answer every one of those questions in writing before the code did the right thing.</p>
+
+      <p>The marketer skill that helped here was not strategy or storytelling. It was the discipline of writing a brief. Specifying a SAFE conversion to an AI is the same exercise as writing a clear brief for a design agency. The output is only as good as the spec, and the spec has to anticipate the ambiguities the executor will not raise on their own.</p>
+
+      <p>Second, <b>the math is recursive and I did not see it at first</b>. The priced-round price-per-share depends on the total fully-diluted share count after the round. The post-round share count depends on how many shares the SAFEs convert into. SAFE share counts depend on the priced-round price. If you also have an option pool top-up to a target percentage, the pool size depends on the post-round share count. Everything depends on everything else.</p>
+
+      <p>My first version tried to solve this linearly: convert the SAFEs, then price the round, then add the pool. The numbers were always slightly off. They looked plausible but they did not satisfy the obvious sanity check, which is that the percentages should add to 100 and the share counts should reconcile. I spent two days trying to debug what I thought were rounding errors before I realised the problem was structural. SAFEs and the priced round happen simultaneously, not in sequence, and the only way to get to a consistent answer is to iterate. Start with a guess of the total share count, compute the round price, convert the SAFEs, recompute the share count, and loop until the number stops moving.</p>
+
+      <p>Once I had this framing, the next round of conversation with ChatGPT was a different conversation: "I need a fixed-point iteration loop that solves for total share count given mutually dependent inputs." That produced code that worked. Without the right frame, the model would not have known what kind of solution I needed.</p>
+
+      <blockquote>AI is good at writing code for a problem you have specified clearly. It is not good at reframing the problem when your specification is wrong.</blockquote>
+
+      <p>I think this is the most important thing I learned. The mental upgrade required to move from "this is a sequence of calculations" to "this is a fixed-point problem" had to happen in my head, not in the model's.</p>
+
+      <p>Third, <b>the polish takes longer than the engine</b>. The conversion logic was probably forty percent of the work. The other sixty percent was input validation, edge cases (what happens if there are no SAFEs, what happens if the round size is zero, what happens if the option pool target is already met), the PDF report layout, the email flow, the empty states, the disclaimers, the responsive behaviour, the colour tokens, and the copy on every label. Most of this was AI-assisted, but every piece needed a human pass because the AI did not know my brand, did not know what an EquityList user expects, and did not know the difference between a defensible disclaimer and a legal hedge that says nothing.</p>
+
+      <h2>What actually changed between Iteration 1 and Iteration 2</h2>
+
+      <p>It is worth saying exactly what changed between the two iterations, and what did not.</p>
+
+      <p>What did not change: the math. Every calculation in Iteration 2 was already correct in Iteration 1. The SAFE conversion, the iteration loop, the option pool top-up, the share count reconciliation, the founder dilution math, all of it was identical. If you only cared about getting the right number out of the calculator, Iteration 1 was finished.</p>
+
+      <p>What changed was what the user was doing with the tool. In Iteration 1, the user filled out a form and waited for an answer. The cognitive sequence was: enter all the inputs, scroll down, look at the result, decide whether to change something, scroll back up, change one number, scroll back down to see what happened. The result panel was the end of the experience.</p>
+
+      <p>In Iteration 2, the user explores. Inputs on the left, results on the right, both live. Change the valuation cap on a SAFE and watch the donut chart move. Bump the option pool target from ten percent to fifteen and watch the founder dilution bar grow. The result panel is the experience. The inputs are the controls.</p>
+
+      <figure>
+        <div class="frame">
+          <video autoplay loop muted playsinline><source src="../images/safe_calculator.mp4" type="video/mp4"></video>
+        </div>
+        <figcaption>The shipped version — inputs on the left, results on the right, both updating live. Live at equitylist.co/safe-calculator.</figcaption>
+      </figure>
+
+      <p>This is a different product, even though the underlying math is identical. A calculator that gives you the answer once is a different thing from a calculator that lets you feel the shape of the math. Founders do not usually understand dilution mathematically. They understand it visually, by watching their slice of the pie chart get smaller. Iteration 2 is the version that lets them do that. Iteration 1 made them do arithmetic in their heads.</p>
+
+      <p>I would not have known this without seeing v0's design. The shift from form-to-tool was sitting in v0's layout choices. I just had to be willing to copy them.</p>
+
+      <h2>The bug I shipped and had to fix</h2>
+
+      <p>The most embarrassing thing in this project was a silent failure mode that I caught only because someone tried the tool in a way I had not.</p>
+
+      <p>The default flow I had built assumed that the user would add at least one SAFE to the calculator. The "before" column in the results, which shows ownership percentages before the priced round closes, was computed off the share count after SAFE conversion but before the round. The logic made sense: "before the round" should include the SAFE shares, because SAFEs convert at or before the round closes, and the user wants to see the post-conversion-pre-round state as the reference point.</p>
+
+      <p>But people opened the calculator and used it without adding any SAFEs at all. They were treating it as a simple priced-round dilution calculator. In that case, my "before" column was computing percentages against a share base that had no SAFE shares in it (because there were no SAFEs), which meant the share base was equal to the existing cap table, which is what it should be, except the code path for that case had not been written. The result was that "before" percentages came out as zero, or as broken fractions, depending on the specific input combination.</p>
+
+      <p>The fix took ten minutes once I saw it. There is a conditional now: if there are no SAFEs in the model, the "before" share count defaults to the existing fully-diluted cap table. The live page even acknowledges this in a note under the results: "All 'before' and 'after' figures assume all SAFEs have converted. If there are no SAFEs, the figures reflect the cap table before the priced round."</p>
+
+      <p>The thing I want to record about this bug is that AI did not catch it. I did not catch it. A colleague catching it five minutes into using the tool was the only reason it got fixed before more people saw a broken output. Financial software fails silently. A wrong number that looks plausible is more dangerous than a crash, because no one calls support over a wrong number that looks plausible. They just lose trust and leave.</p>
+
+      <p>The takeaway is that AI-assisted development does not exempt you from a real testing process. If anything, it raises the bar, because the AI will happily produce code that compiles and runs and is subtly wrong, and you will not know unless someone uses the tool in a way you did not predict. I now keep a list of degenerate test cases that I run against every change: no SAFEs, no option pool, no priced round, single SAFE with no cap, single SAFE with no discount, MFN with nothing below it.</p>
+
+      <h2>The opinionated call I had to make</h2>
+
+      <p>The hardest decision in the build was not technical. It was about which version of SAFE math to implement.</p>
+
+      <p>Under the standard YC post-money SAFE, multiple post-money SAFEs do not dilute each other. Each one locks in an ownership percentage relative to the post-SAFE-pre-round cap table, and the dilution from each subsequent SAFE falls on the founders, not on the earlier SAFE holders. This is the design intent of the post-money SAFE and it is what makes the post-money form investor-friendly and founder-unfriendly compared to the older pre-money form.</p>
+
+      <p>But not every SAFE in the wild is a YC SAFE. There is a non-standard interpretation in which post-money SAFEs <em>do</em> dilute each other in a cascading way, where each successive SAFE issuance shrinks the locked-in percentages of the earlier ones. A few deal documents on non-YC templates encode this. An advisor I was reviewing the calculator with raised it explicitly:</p>
+
+      <blockquote>"Standard YC docs only talk about post-money. But if we use non-YC methodology, then stacking becomes critical. Each successive SAFE note keeps diluting the prior SAFE note as well. That's the opposite of what is happening right now."<cite>— advisor review note</cite></blockquote>
+
+      <p>I considered building both modes and letting the user pick. I decided against it for the first version. The reasoning was that supporting two interpretations doubles the surface area of the tool, doubles the testing burden, and confuses the user who does not know which interpretation their SAFE encodes. The YC interpretation is the most widely used, the most defensible, and the one that matches the documentation a founder is most likely to have signed.</p>
+
+      <p>I made this an explicit choice in the product, not a silent one. The page title in production is "YC SAFE Calculator | Model SAFE Conversions" and the description on the page says the tool uses YC SAFE conversion methodology. If you have signed a non-YC SAFE with cascading dilution language, the calculator will mis-model it, and the right answer is for you to sit with a lawyer rather than an internet calculator.</p>
+
+      <p>The reason this matters as a process note is that no AI tool would have made this call for me. Both interpretations exist, both can be implemented, both have plausible justifications. The decision about which one to ship was a product decision that required a view on who the user is, what they will use the tool for, and what kind of mistake we would rather make. That is the product marketer's job, and it is the part of the work that does not get easier with better models.</p>
+
+      <h2>What changed about my work</h2>
+
+      <p>A few honest reflections on what this project did to my sense of what a product marketer can do.</p>
+
+      <p>The line between "marketing asset" and "product" used to be a question of who built it. A blog post or a landing page was marketing. A calculator or an interactive widget was product, which meant it required engineering time, which meant it lived on a roadmap, which meant I could brief it but I could not ship it. That line is gone, or at least it has moved significantly. I shipped a working interactive financial tool with the same lead time as a long blog post. The constraint on whether I can build the thing is no longer whether I can recruit engineers. It is whether the thing falls inside the boundary of what an AI-assisted non-engineer can defensibly ship.</p>
+
+      <p>That boundary is narrower than the hype suggests but wider than the skepticism suggests. I would not have been able to ship a calculator that handles liquidation preferences, anti-dilution provisions, or multi-round modeling. The complexity ramps up quickly once you leave the standard SAFE-and-priced-round case, and the AI tools start producing code that is plausible-looking but wrong in ways I cannot diagnose. The SAFE calculator is at the edge of what I could verify. Anything more complex needs a real engineer.</p>
+
+      <p>The skill that mattered most was specification. Most of the visible output of this project is code and design, but most of the actual work was writing prompts, writing requirement documents, writing test cases, and writing copy. That is marketer work. The AI accelerated the conversion of that writing into running software, which is a different thing from replacing it.</p>
+
+      <p>I am also more careful now about claiming that something is "AI-powered" or "AI-generated." A lot of what shipped is, in a literal sense, AI-generated. But the parts that make the calculator usable, the decision to use YC math, the decision to remove the fake AI advisor, the decision to gate the PDF download behind a lead form but leave the on-screen calculation open, the decision to write the disclaimer the way I did, those were not AI decisions. They were product decisions made by a human, informed by AI tools, executed in code that AI tools helped me write. There is no single phrase that captures that relationship cleanly, which is probably why the marketing language around AI-assisted work is so bad. I would rather describe what I actually did than reach for a label.</p>
+
+      <h2>What I would do differently</h2>
+
+      <p>If I were starting this project again, four things would change.</p>
+
+      <p>I would start with the iteration loop, not the linear calculation. I would write the fixed-point solver first and trust that the SAFE conversion rules can plug into it as functions. The two days I spent debugging "rounding errors" that were actually structural errors are the most concrete waste in this project.</p>
+
+      <p>I would write the test cases before the code. AI tools are happy to generate plausible code. They are also happy to break things subtly when you ask for an unrelated change. A regression test suite, even an informal one I run manually, would have caught the no-SAFEs bug before it shipped.</p>
+
+      <p>I would leave AI Studio earlier. The signal that it is time to move to a tool with explicit file management is when small requests start touching things you did not ask about. The moment I noticed that happening I should have moved immediately, not after three more days of fighting the drift.</p>
+
+      <p>I would skip Iteration 1 entirely. The form-on-top, results-on-bottom version was a stage of the project I should have known I would discard. The split-screen layout was obvious from any modern financial tool that does scenario modeling. I spent time polishing a layout I was going to throw away because I did not commit to the layout I would eventually keep.</p>
+
+      <h2>What this is, and what it is not</h2>
+
+      <p>The calculator is a reference model for understanding dilution mechanics. It assumes YC-standard SAFE terms. It does not handle liquidation preferences, participation rights, anti-dilution provisions, secondary transactions, or 409A implications. It does not enforce jurisdiction-specific SAFE interpretations. It is not a substitute for legal counsel or a cap table system of record.</p>
+
+      <p>What it is, for me, is evidence that the kind of thing a product marketer can ship has changed. I built a tool that does real work, in less time than I would have spent writing the brief for an engineer to build it. The math is correct. The design is competent. The bug list is short. The thing exists on the internet and people use it.</p>
+
+      <p>The argument for AI in marketing has mostly been about volume: more content, more variants, faster iteration. The argument I would make after this project is about scope. The interesting question is no longer whether AI lets a marketer produce more of the same kind of thing. It is whether AI lets a marketer produce kinds of things that were previously not on the table. A working SAFE calculator was, until recently, not on the table for someone in my role. It is now. I expect the next things to come off that list will be more consequential than this one.</p>
+    </div>
+
+    <div class="pagenav">
+      <a href="../read.html"><span class="dir">←</span>All writing</a>
+      <a class="nxt" href="../project-mvp.html"><span class="dir">The project →</span>Product MVPs</a>
+    </div>
+  </article>
+</div>
+
+<script>
+  (function(){
+    var dd=document.getElementById('dd'),btn=document.getElementById('ddBtn');
+    btn.addEventListener('click',function(e){e.stopPropagation();var o=dd.classList.toggle('open');btn.setAttribute('aria-expanded',o);});
+    document.addEventListener('click',function(){dd.classList.remove('open');btn.setAttribute('aria-expanded',false);});
+  })();
+</script>
+</body>
+</html>
