@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building EquityList's First Self-Serve Onboarding Flow — Farheen Shaikh</title>
+<meta name="description" content="How I designed and prototyped EquityList's first self-serve onboarding flow — the instinct I had to unlearn, the argument I lost, and the edge cases that mattered more than the happy path.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --display:"Geist",system-ui,sans-serif;
+    --body:"Geist",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --paper:#FFFFFF; --ink:#15141A; --muted:#5F5E66; --faint:#9C9BA3;
+    --hair:#E7E6E1; --hair2:#EFEEE9; --maxw:720px;
+    --accent:#993C1D; --accent-bg:#FAECE7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  a{color:inherit}
+  /* sticky nav (uses ../ because this page sits in /writing) */
+  .mininav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .mininav .bar{max-width:840px;margin:0 auto;padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .mininav .home{font-family:var(--mono);font-size:13px;color:var(--ink);white-space:nowrap;text-decoration:none}
+  .mininav .home:hover{color:var(--muted)}
+  .mininav .right{display:flex;align-items:center;gap:8px}
+  .mininav .btn{font-family:var(--mono);font-size:12px;letter-spacing:.02em;padding:7px 14px;border:1px solid var(--ink);background:transparent;color:var(--ink);transition:.15s;cursor:pointer;text-decoration:none}
+  .mininav .btn:hover{background:var(--ink);color:#fff}
+  .mininav .btn.solid{background:var(--ink);color:#fff}
+  .dd{position:relative}
+  .dd .btn.toggle{display:inline-flex;align-items:center;gap:6px}
+  .dd .menu{position:absolute;top:calc(100% + 8px);right:0;min-width:210px;background:#fff;border:1px solid var(--hair);padding:6px;display:none;box-shadow:0 8px 28px rgba(0,0,0,.08)}
+  .dd.open .menu{display:block}
+  .dd .menu a{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);padding:9px 12px;white-space:nowrap;text-decoration:none;transition:.12s}
+  .dd .menu a:hover{background:var(--hair2);color:var(--ink)}
+  @media(max-width:560px){.mininav .btn.txt{display:none}}
+  /* article */
+  article{padding:52px 0 0}
+  .crumb{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:30px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .crumb a{color:var(--muted);text-decoration:none;transition:.15s}
+  .crumb a:hover{color:var(--ink)}
+  .crumb .sep{color:var(--hair)}
+  .crumb .cur{color:var(--ink)}
+  .pmeta{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--faint);margin-bottom:16px;text-transform:uppercase}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(2rem,5vw,2.9rem);letter-spacing:-.025em;line-height:1.08;margin-bottom:20px}
+  .standfirst{font-size:1.3rem;line-height:1.5;color:var(--muted);margin-bottom:36px;padding-bottom:36px;border-bottom:1px solid var(--hair)}
+  .body p{margin-bottom:26px;color:#23222a}
+  .body h2{font-family:var(--display);font-weight:600;font-size:1.5rem;letter-spacing:-.015em;margin:52px 0 18px;line-height:1.2}
+  .body h3{font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:-.01em;margin:36px 0 14px;color:#23222a}
+  .body ul,.body ol{margin:0 0 24px 0;padding-left:0;list-style:none}
+  .body li{position:relative;padding-left:24px;margin-bottom:14px;color:#23222a}
+  .body li:last-child{margin-bottom:0}
+  .body li::before{content:"—";position:absolute;left:0;color:var(--faint)}
+  .body a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--hair)}
+  .body a:hover{text-decoration-color:var(--ink)}
+  .body b,.body strong{font-weight:600}
+  code{font-family:var(--mono);font-size:.88em;background:var(--hair2);padding:1px 5px;border-radius:2px}
+  blockquote{margin:36px 0;padding:6px 0 6px 26px;border-left:3px solid var(--ink);
+    font-family:var(--display);font-size:1.45rem;line-height:1.35;font-weight:500;letter-spacing:-.01em;color:var(--ink)}
+  blockquote cite{display:block;margin-top:12px;font-family:var(--mono);font-size:12px;font-weight:400;font-style:normal;color:var(--faint);letter-spacing:.04em}
+  /* a verbatim prompt / spec block — mono, panelled, deliberately not a pull-quote */
+  .spec{margin:32px 0;padding:22px 24px;background:#FAFAF8;border:1px solid var(--hair);
+    font-family:var(--mono);font-size:13.5px;line-height:1.65;color:#33323a}
+  .spec p{margin-bottom:14px;color:inherit}
+  .spec p:last-child{margin-bottom:0}
+  .spec ul{margin:0 0 14px 0;list-style:none;padding-left:0}
+  .spec li{padding-left:18px;margin-bottom:6px;color:inherit}
+  .spec li::before{content:"·";position:absolute;left:4px;color:var(--faint)}
+  .spec .lbl{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  figure{margin:36px 0}
+  figure .frame{border:1px solid var(--hair);background:#FAFAF8;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  figure img,figure video{width:100%;height:auto;display:block}
+  figure .ph{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.04em;text-align:center;padding:0 20px}
+  figcaption{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:10px;line-height:1.5}
+  .pagenav{display:flex;justify-content:space-between;gap:16px;padding:48px 0 56px;margin-top:44px;border-top:1px solid var(--hair)}
+  .pagenav a{font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:none;transition:.15s;display:flex;flex-direction:column;gap:4px}
+  .pagenav a:hover{color:var(--ink)}
+  .pagenav .dir{font-size:11px;color:var(--faint)}
+  .pagenav .nxt{text-align:right}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+</style>
+</head>
+<body>
+<nav class="mininav">
+  <div class="bar">
+    <a class="home" href="../index.html">⌂ Home</a>
+    <div class="right">
+      <div class="dd" id="dd">
+        <button class="btn toggle" type="button" id="ddBtn" aria-haspopup="true" aria-expanded="false">Projects ▾</button>
+        <div class="menu">
+          <a href="../project-ai-automation.html">01 · AI Automation</a>
+          <a href="../project-growth.html">02 · Growth &amp; Demand Gen</a>
+          <a href="../project-mvp.html">03 · Product MVPs</a>
+          <a href="../project-positioning.html">04 · Positioning</a>
+          <a href="../project-engagement-retention.html">05 · Engagement &amp; Retention</a>
+        </div>
+      </div>
+      <a class="btn txt" href="../read.html">Read</a>
+      <a class="btn txt" href="mailto:28.shaikh.farheen@gmail.com">Contact</a>
+      <a class="btn solid" href="../resume.html">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <article>
+    <nav class="crumb"><a href="../index.html">Home</a> <span class="sep">/</span> <a href="../read.html">Read</a> <span class="sep">/</span> <span class="cur">Building EquityList's First Self-Serve Onboarding Flow</span></nav>
+
+    <div class="pmeta">Essay · September 2026 · 8 min read</div>
+    <h1>Building EquityList's First Self-Serve Onboarding Flow</h1>
+    <p class="standfirst">Until this summer, every EquityList customer had been onboarded by a person. This is how I designed and prototyped the first flow that takes someone from a landing page to a working product without one — the instinct I had to unlearn, the argument I lost, and the edge cases that mattered more than the happy path.</p>
+
+    <div class="body">
+      <p>The product handles cap tables, stock options, and statutory compliance. Someone from the team always walked a new company through setup, because the data is sensitive and the domain is unfamiliar to most buyers. Nobody signed up and figured it out alone.</p>
+
+      <p>I lead product marketing at EquityList. The project I took on was designing and prototyping the company's first self-serve flow: taking a user from a landing page to a working product without a single human conversation. I built the prototype myself using AI tools. It shipped on September 1st.</p>
+
+      <p>What follows is how I thought through it.</p>
+
+      <h2>The instinct I had to unlearn</h2>
+
+      <p>The product is AI-native. Users talk to their equity data instead of clicking through modules. Ask the AI to issue 50 options to someone and it does it. Ask it to pull your cap table and it shows you. So when I started scoping self-serve onboarding, my first instinct was to make the whole thing conversational — the AI walks you through signup, asks questions, sets up your workspace. It felt natural, because it matched what the product already was.</p>
+
+      <p>A teammate pushed back. The problem with chat as an onboarding interface is that nothing stays anchored. Nobody scrolls back up a long thread to check what they already said — not in our product, not in ChatGPT, not anywhere. And onboarding is the one moment where users actually need to see their answers laid out in front of them, because those answers determine everything downstream: the data they'll see, the prompts the assistant will suggest, whether certain flows trigger at all. People close the tab and come back tomorrow. Chat doesn't tell them where they left off.</p>
+
+      <p>The deeper issue was that I'd been so close to the product's conversational identity that I'd confused what the product <em>is</em> with what every moment of the product should <em>look like</em>. The decision we landed on was that data collection — profiling, import, migration — wouldn't happen through chat. Chat would be reserved for what it's actually good at: showing users what the AI can do with their data once it's in.</p>
+
+      <p>That distinction, conversational as a capability rather than a container for everything, ended up shaping the whole flow.</p>
+
+      <h2>The three-stage flow</h2>
+
+      <h3>Stage one: forms</h3>
+
+      <p>A set of form screens where the user tells us who they are: name, company, role, country, what brings them here, how they manage equity today, how many stakeholders they're working with. These are traditional forms, deliberately. The answers personalise everything that comes next, and the user needs to be able to see and edit them clearly.</p>
+
+      <h3>Stage two: the Cinematic Glimpse</h3>
+
+      <p>The idea came from our CEO during a brainstorming call. He compared it to what happens in video games when you enter a new chapter — there's a cutscene that gives you context for what this stage is about, and then you're in game mode. The profiling questions are the loading screen. The Glimpse is the cutscene. And then you're in the product.</p>
+
+      <p>In practice, the Glimpse is a scripted sequence where the AI assistant introduces itself (it's called Eclipse by default, renameable across the workspace), lets the user pick a visual theme, and then auto-runs a real grant issuance through question-and-confirm turns while a simulated pointer clicks the options on the user's behalf. The dummy data behind it is shaped by the profiling answers and drawn from a prompt library we built: 96 tool-call prompts across 15 categories, all grounded in one fictional company so the numbers stay consistent, localised through <code>Intl.NumberFormat</code> for 20 markets so the formatting is correct whether you're in Mumbai or Berlin.</p>
+
+      <p>The experience escalates through progressive disclosure. Initially only suggestion chips are visible. After the user runs their first prompt, the chat input appears — they've acted once, so typing is now worth offering. After the second, a banner appears: "Ready to bring in your real data?" We reduced it to two interactive prompts before shipping. Three delayed gratification without adding enough. The goal was to get the real product in their hands as fast as possible.</p>
+
+      <figure>
+        <div class="frame">
+          <video autoplay loop muted playsinline><source src="../images/live_selfserve.mp4" type="video/mp4"></video>
+        </div>
+        <figcaption>The shipped flow — profiling, the Cinematic Glimpse, and the handoff into the real product.</figcaption>
+      </figure>
+
+      <h3>Stage three: the real product</h3>
+
+      <p>The user lands on the actual product homepage — a blank workspace with a setup guide, a chat interface, and a clear path to importing their data. The Glimpse is over. The product has started.</p>
+
+      <p>Real data import runs the opposite way from profiling. Instead of a rigid upload wizard, AI reads the company's raw spreadsheets and exports from other cap table platforms directly, in whatever format they already have them. Profiling stayed a form because the user needed to see and correct their own answers. Import didn't need that same anchoring — it needed to absorb whatever messy format was already sitting in someone's Drive. Each choice came down to picking the interface the moment actually needed.</p>
+
+      <h2>Two aha moments</h2>
+
+      <p>I think about this flow as having two separate aha moments, and I think the distinction matters.</p>
+
+      <p>The first aha is the Glimpse. The AI does something useful — issues a grant, pulls an ownership breakdown, shows a vesting schedule — and the user sees what the product can do. But it's running on fictional data, and the user knows it. However good the demo is, it's still a performance. It can impress someone. It can't convince them to move their cap table.</p>
+
+      <p>The second aha only happens after the user uploads their real data. The product scans it and finds something: a vesting schedule that doesn't add up, a cap table that doesn't reconcile, a valuation that's missing. This is a different kind of moment. The product hasn't just accepted the data — it's caught something the user's existing process was getting wrong. That's when it stops being interesting and starts being necessary.</p>
+
+      <p>The edge case I spent real time on: what if the data is clean? Then you still owe them something — an approaching compliance deadline, unvested equity concentrated in one department, an option pool running low. The rule I set was that nobody uploads and gets silence.</p>
+
+      <h2>The argument I lost</h2>
+
+      <p>The argument I lost on this project was about what the Glimpse should be.</p>
+
+      <p>I wanted it to be live. If the AI says "I've issued 50 options to Farheen," I thought the user should be able to navigate to that grant and verify it actually exists. The product's whole pitch is that the AI executes things, not just describes them. A demo that claims execution but can't show the result undermines the thing it's selling.</p>
+
+      <p>A teammate had three objections. First, scope: if Glimpse actions create real records, the Glimpse needs a navigable product surface inside it, and that's a different project. Second, junk data: users experimenting would generate records that have to be wiped before real import. Third, and this is what changed my mind, the blurred boundary. If demo actions persist, there's no clean line between testing and using. A user could run the Glimpse, issue grants, explore the cap table, and effectively be on the platform without us knowing whether they've uploaded real data or are still playing with the fictional company.</p>
+
+      <p>Our activation metrics, our onboarding funnel, eventually our monetisation — all depend on knowing when someone crosses from evaluating to using. A live Glimpse erases that line.</p>
+
+      <p>I lost. The resolution was that every action in the Glimpse is labelled as simulated. An always-on badge sits at the top of the screen. Write results show real product footage of what the outcome would look like — actual recordings from the live product, rather than mockups. The Glimpse stays self-contained.</p>
+
+      <blockquote>My instinct about trust was right. My teammate's instinct about the system was more important. Being right about the user experience doesn't always mean you're right about the decision.</blockquote>
+
+      <h2>What else I got right, and what I left open</h2>
+
+      <p>I designed for drop-off at every step, not the happy path. Didn't answer the profiling questions: an email nudge to unlock the sandbox. Answered but didn't enter the Glimpse: "your sandbox is ready." Played in the sandbox but didn't upload: a drip campaign. The happy path is maybe 20% of the design work.</p>
+
+      <p>Some decisions I kept deliberately open. Whether to gate signup behind a company email domain, or also require a certificate of incorporation, is still unresolved. We had a real prospect once who only had a Gmail address. A policy decision with genuine cost on both sides is better made consciously and late than unconsciously and early.</p>
+
+      <p>Every sample response inside the Glimpse carries a disclosure that it's running on simulated data and that the same action will run on the user's real data once they import. If someone tries to upload during the Glimpse, an alert tells them this is a simulated environment and points them to the real next step. When the product holds legally significant equity data, the demo has to be honest about where the demo ends.</p>
+
+      <p>This was my first project of this kind — taking a product that had always been sold through people and figuring out how it sells itself. The thing I didn't expect is how much of the work was about restraint. Not building the Glimpse as a live environment even though my instinct said to. Not making every interaction a chat just because the product is conversational. Not designing only for the user who follows the happy path. Not resolving policy questions before there was enough information to resolve them well.</p>
+
+      <p>The flow shipped on September 1st. It's too early to know how it performs. What I do know is that the hardest part wasn't designing what the user sees. It was deciding what the user doesn't see, and being honest about which decisions weren't mine to make alone.</p>
+    </div>
+
+    <div class="pagenav">
+      <a href="../read.html"><span class="dir">←</span>All writing</a>
+      <a class="nxt" href="../project-mvp.html"><span class="dir">The project →</span>Product MVPs</a>
+    </div>
+  </article>
+</div>
+
+<script>
+  (function(){
+    var dd=document.getElementById('dd'),btn=document.getElementById('ddBtn');
+    btn.addEventListener('click',function(e){e.stopPropagation();var o=dd.classList.toggle('open');btn.setAttribute('aria-expanded',o);});
+    document.addEventListener('click',function(){dd.classList.remove('open');btn.setAttribute('aria-expanded',false);});
+  })();
+</script>
+</body>
+</html>
