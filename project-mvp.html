@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product MVPs — Farheen Shaikh</title>
-<meta name="description" content="Two live calculators — SAFE and ROI — built end to end as a PMM, not an engineer.">
+<meta name="description" content="Three shipped builds — a SAFE calculator, an ROI calculator, and EquityList's first self-serve onboarding flow — built end to end as a PMM, not an engineer.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -153,15 +153,15 @@
   <header>
     <nav class="crumb"><a href="index.html">Home</a> <span class="sep">/</span> <span class="cur">Product MVPs</span></nav>
     <div class="eyebrow"><span class="sq"></span>PRODUCT · MVPS</div>
-    <h1>Calculators</h1>
+    <h1>MVPs</h1>
     <div class="meta">
       <span>Product strategy · design · launched solo</span>
-      <span>2 live calculators</span>
+      <span>3 shipped builds</span>
     </div>
   </header>
 
   <div class="framing">
-    <p>Two tools I built end to end as a product marketer, not an engineer — a SAFE calculator that models the YC post-money methodology, and an ROI calculator that turns value props into numbers buyers reach on their own.</p>
+    <p>Three things I built end to end as a product marketer, not an engineer — a SAFE calculator that models the YC post-money methodology, an ROI calculator that turns value props into numbers buyers reach on their own, and EquityList's first self-serve onboarding flow.</p>
   </div>
 
   <main class="pgrid">
@@ -204,6 +204,27 @@
         <h3 style="margin-top:24px">See it work</h3>
         <div class="shot" style="margin-top:16px;border-radius:8px">
           <video autoplay loop muted playsinline style="width:100%;height:auto;display:block"><source src="images/roi_calculator.mp4" type="video/mp4"></video>
+        </div>
+      </div>
+    </button>
+
+    <button class="pcard" type="button" style="grid-column:1 / -1">
+      <div class="head">
+        <span class="tag">PRODUCT · LIVE</span>
+        <h2>Self-Serve Onboarding Flow</h2>
+        <p class="promise">Take a user from landing page to working product with no human conversation.</p>
+        <span class="more">Learn more</span>
+      </div>
+      <div class="body">
+        <h3>The problem</h3>
+        <p>Every EquityList customer had been onboarded by a person. The product handles cap tables, stock options, and statutory compliance, so someone from the team always walked a new company through setup — the data is sensitive and the domain is unfamiliar. Nobody signed up and figured it out alone. I took on designing and prototyping the company's first self-serve flow, end to end, and built the prototype myself using AI tools.</p>
+        <h3>Why I built it</h3>
+        <p>The product is AI-native — users talk to their equity data instead of clicking through modules — so my first instinct was to make onboarding conversational too. A teammate pushed back: nothing in a chat thread stays anchored, and onboarding is the one moment users need their answers laid out in front of them, because those answers determine everything downstream. We split the flow instead: forms collect the profiling data, and a scripted "Cinematic Glimpse" — the AI assistant introduces itself and auto-runs a real grant issuance on fictional data shaped by those answers — shows what the product can do before any real data comes in. Chat stayed reserved for that moment, once the user had something to see.</p>
+        <h3>The result</h3>
+        <p>I designed for drop-off at every stage, not just the happy path — email nudges, sandbox-ready messages, drip campaigns, depending on where someone stalls. I also drew a hard line between the simulated Glimpse and the live product: every Glimpse action carries an always-on "simulated" badge and none of it writes real records, so activation and onboarding metrics never conflate testing with using. That line was the argument I lost — I wanted Glimpse actions to be real and verifiable, since the product's pitch is that the AI executes rather than describes. A teammate was right that a live Glimpse erases the boundary between evaluating the product and using it. The flow shipped September 1st. It's too early to know how it performs.</p>
+        <h3 style="margin-top:24px">See it work</h3>
+        <div class="shot" style="margin-top:16px;border-radius:8px">
+          <video autoplay loop muted playsinline style="width:100%;height:auto;display:block"><source src="images/live_selfserve.mp4" type="video/mp4"></video>
         </div>
       </div>
     </button>
