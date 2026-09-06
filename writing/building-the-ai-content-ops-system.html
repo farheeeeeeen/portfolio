@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building EquityList's AI Content Operations System — Farheen Shaikh</title>
+<meta name="description" content="How I built a working AI operations system for content strategy at EquityList using Claude Code — the skills, the sub-agent, the bugs I caught by actually using it, and the framework I discovered I'd already built.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --display:"Geist",system-ui,sans-serif;
+    --body:"Geist",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --paper:#FFFFFF; --ink:#15141A; --muted:#5F5E66; --faint:#9C9BA3;
+    --hair:#E7E6E1; --hair2:#EFEEE9; --maxw:720px;
+    --accent:#0F6E56; --accent-bg:#E9F2EF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  a{color:inherit}
+  .mininav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .mininav .bar{max-width:840px;margin:0 auto;padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .mininav .home{font-family:var(--mono);font-size:13px;color:var(--ink);white-space:nowrap;text-decoration:none}
+  .mininav .home:hover{color:var(--muted)}
+  .mininav .right{display:flex;align-items:center;gap:8px}
+  .mininav .btn{font-family:var(--mono);font-size:12px;letter-spacing:.02em;padding:7px 14px;border:1px solid var(--ink);background:transparent;color:var(--ink);transition:.15s;cursor:pointer;text-decoration:none}
+  .mininav .btn:hover{background:var(--ink);color:#fff}
+  .mininav .btn.solid{background:var(--ink);color:#fff}
+  .dd{position:relative}
+  .dd .btn.toggle{display:inline-flex;align-items:center;gap:6px}
+  .dd .menu{position:absolute;top:calc(100% + 8px);right:0;min-width:210px;background:#fff;border:1px solid var(--hair);padding:6px;display:none;box-shadow:0 8px 28px rgba(0,0,0,.08)}
+  .dd.open .menu{display:block}
+  .dd .menu a{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);padding:9px 12px;white-space:nowrap;text-decoration:none;transition:.12s}
+  .dd .menu a:hover{background:var(--hair2);color:var(--ink)}
+  @media(max-width:560px){.mininav .btn.txt{display:none}}
+  article{padding:52px 0 0}
+  .crumb{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:30px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .crumb a{color:var(--muted);text-decoration:none;transition:.15s}
+  .crumb a:hover{color:var(--ink)}
+  .crumb .sep{color:var(--hair)}
+  .crumb .cur{color:var(--ink)}
+  .pmeta{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--faint);margin-bottom:16px;text-transform:uppercase}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(2rem,5vw,2.9rem);letter-spacing:-.025em;line-height:1.08;margin-bottom:20px}
+  .standfirst{font-size:1.3rem;line-height:1.5;color:var(--muted);margin-bottom:36px;padding-bottom:36px;border-bottom:1px solid var(--hair)}
+  .body p{margin-bottom:26px;color:#23222a}
+  .body h2{font-family:var(--display);font-weight:600;font-size:1.5rem;letter-spacing:-.015em;margin:52px 0 18px;line-height:1.2}
+  .body h3{font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:-.01em;margin:36px 0 14px;color:#23222a}
+  .body ul,.body ol{margin:0 0 24px 0;padding-left:0;list-style:none}
+  .body li{position:relative;padding-left:24px;margin-bottom:14px;color:#23222a}
+  .body li:last-child{margin-bottom:0}
+  .body li::before{content:"—";position:absolute;left:0;color:var(--faint)}
+  .body a{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--hair)}
+  .body a:hover{text-decoration-color:var(--ink)}
+  .body b,.body strong{font-weight:600}
+  code{font-family:var(--mono);font-size:.88em;background:var(--hair2);padding:1px 5px;border-radius:2px}
+  blockquote{margin:36px 0;padding:6px 0 6px 26px;border-left:3px solid var(--ink);
+    font-family:var(--display);font-size:1.45rem;line-height:1.35;font-weight:500;letter-spacing:-.01em;color:var(--ink)}
+  blockquote cite{display:block;margin-top:12px;font-family:var(--mono);font-size:12px;font-weight:400;font-style:normal;color:var(--faint);letter-spacing:.04em}
+  .spec{margin:32px 0;padding:22px 24px;background:#FAFAF8;border:1px solid var(--hair);
+    font-family:var(--mono);font-size:13.5px;line-height:1.65;color:#33323a}
+  .spec p{margin-bottom:14px;color:inherit}
+  .spec p:last-child{margin-bottom:0}
+  .spec ul{margin:0 0 14px 0;list-style:none;padding-left:0}
+  .spec li{padding-left:18px;margin-bottom:6px;color:inherit;position:relative}
+  .spec li::before{content:"·";position:absolute;left:4px;color:var(--faint)}
+  .spec .lbl{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+  figure{margin:36px 0}
+  figure .frame{border:1px solid var(--hair);background:#FAFAF8;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  figure img,figure video{width:100%;height:auto;display:block}
+  figure .ph{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.04em;text-align:center;padding:0 20px}
+  figcaption{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:10px;line-height:1.5}
+  .pagenav{display:flex;justify-content:space-between;gap:16px;padding:48px 0 56px;margin-top:44px;border-top:1px solid var(--hair)}
+  .pagenav a{font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:none;transition:.15s;display:flex;flex-direction:column;gap:4px}
+  .pagenav a:hover{color:var(--ink)}
+  .pagenav .dir{font-size:11px;color:var(--faint)}
+  .pagenav .nxt{text-align:right}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+</style>
+</head>
+<body>
+<nav class="mininav">
+  <div class="bar">
+    <a class="home" href="../index.html">⌂ Home</a>
+    <div class="right">
+      <div class="dd" id="dd">
+        <button class="btn toggle" type="button" id="ddBtn" aria-haspopup="true" aria-expanded="false">Projects ▾</button>
+        <div class="menu">
+          <a href="../project-ai-automation.html">01 · AI Automation</a>
+          <a href="../project-growth.html">02 · Growth &amp; Demand Gen</a>
+          <a href="../project-mvp.html">03 · Product MVPs</a>
+          <a href="../project-positioning.html">04 · Positioning</a>
+          <a href="../project-engagement-retention.html">05 · Engagement &amp; Retention</a>
+        </div>
+      </div>
+      <a class="btn txt" href="../read.html">Read</a>
+      <a class="btn txt" href="mailto:28.shaikh.farheen@gmail.com">Contact</a>
+      <a class="btn solid" href="../resume.html">Résumé</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <article>
+    <nav class="crumb"><a href="../index.html">Home</a> <span class="sep">/</span> <a href="../read.html">Read</a> <span class="sep">/</span> <span class="cur">Building EquityList's AI Content Operations System</span></nav>
+
+    <div class="pmeta">Essay · September 2026 · 9 min read</div>
+    <h1>Building EquityList's AI Content Operations System</h1>
+    <p class="standfirst">I lead content strategy at EquityList with no engineering background. This is how I used Claude Code to build a working operations system for quarterly planning, weekly SEO and lead analysis, and content ops — the bugs I caught by actually using it, and the framework I found out I'd already built.</p>
+
+    <div class="body">
+      <p>The job before this system was the ordinary content-marketer grind. Track a growing blog inventory by hand. Guess at keyword volumes. Pull Search Console and HubSpot exports one at a time. Build the quarter's calendar in a spreadsheet. There was no systematic way to answer "have we already covered this?" against 150-plus posts — you searched your memory, or you searched the spreadsheet, and hoped you searched it right.</p>
+
+      <p>I write for founders, CFOs, and HR/People Ops at Indian startups, Seed through Series C, expanding into the US. EquityList is an equity-management platform — cap tables, ESOPs, fundraising, compliance. None of that work needs a marketer who codes. It needed a system, and I built one with Claude Code and a layer of custom Skills on top of it: reusable, plain-English-triggered workflows that turned the spreadsheet grind into something I could just talk to.</p>
+
+      <h2>Day zero wasn't a live build</h2>
+
+      <p>I want to be honest about how this started, because "I built this from scratch on stream" is a better story than the true one. The initial commit landed the whole skeleton at once: five skills, one sub-agent, eighteen Python scripts, and the full data layer — blog inventory, keyword map, competitor data, HubSpot snapshots, the Q2 calendar, thirty-plus weeks of pre-existing performance history. That was the first working version. Everything from there was refinement, done in the open, against real use.</p>
+
+      <p>The refinements started the same day. I fixed the keyword-discovery workflow because it wasn't preserving status between runs, and made the calendar paths dynamic instead of hardcoded to one quarter. A day later I extended the performance-analysis skill to pull HubSpot lead-journey data too, merging SEO performance and lead attribution into one report instead of two. A day after that, a full systems document — every script, every skill, every design decision, written in two passes, with a step-by-step section on replicating the whole thing for another company.</p>
+
+      <h2>What it looks like today</h2>
+
+      <p>The system has four layers. Skills sit on top — the natural-language commands I actually type. Below that, a sub-agent handles research that would otherwise clutter the main conversation. Below that, eighteen-plus Python scripts do the orchestration: hitting APIs, processing data, syncing to Sheets. At the bottom, a data layer — JSON for anything nested and stateful, CSV for anything flat and meant to be opened in a spreadsheet. All of it reads from HubSpot, Google Search Console, Plausible, Semrush, and Webflow, and writes out to Google Sheets.</p>
+
+      <p>Five skills carry the actual work:</p>
+
+      <ul>
+        <li><code>/categorize-blogs</code> — turns a raw list of titles and URLs into a structured inventory: category, funnel stage, geography, content type, status.</li>
+        <li><code>/content-strategy</code> — the quarterly planning engine. Gap analysis, then competitor research (spawned as a sub-agent so it doesn't bloat the main conversation), then keyword discovery across forty-plus seed terms, then seven mandatory quality filters, then volume validation, then prioritization, then a ranked calendar of thirty-six to fifty topics.</li>
+        <li><code>/analyze-performance</code> — the weekly report. Search Console data merged with HubSpot deal data, producing quick wins, underperformer diagnoses, internal-linking suggestions, and an automated lead-journey pull.</li>
+        <li><code>/new-blog-published</code> — the post-publish checklist, automated: add to inventory, register the keyword, flip the calendar status from Planned to Published, suggest internal links.</li>
+        <li><code>/lead-magnets</code> — scans for keywords that imply a tool or template rather than a blog post, scores the opportunity, and outputs a build brief.</li>
+      </ul>
+
+      <figure>
+        <div class="frame"><img src="../images/ai-automation.svg" alt="System architecture: skills, sub-agent, scripts, data layer, and integrations" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/ai-automation.svg</span>')"></div>
+        <figcaption>The four-layer architecture: skills, sub-agent, scripts, data layer, external integrations.</figcaption>
+      </figure>
+
+      <h2>Where the judgment actually lives</h2>
+
+      <p>The quarterly-planning skill is the one that matters most, and the seven quality filters inside it are the closest thing this system has to my own editorial brain, written down as rules a machine can enforce every time:</p>
+
+      <div class="spec">
+        <span class="lbl">Quality filters — /content-strategy</span>
+        <ul>
+          <li>Audience match — would a founder or CFO actually search this, not an employee or a retail trader?</li>
+          <li>Domain relevance — is it actually about equity management, not generic startup advice?</li>
+          <li>Intent specificity — does the volume come from the right audience? "Capital gain tax on sale of shares" is mostly retail traders; the real target is "capital gains on unlisted shares."</li>
+          <li>Terminology accuracy — reject a topic built around a technically wrong term, even if that term has more search volume.</li>
+          <li>No duplication — check the existing inventory and keyword status before ever suggesting a topic twice.</li>
+          <li>Lead-magnet intent — a keyword implying "calculator" or "template" doesn't belong in the content calendar at all.</li>
+          <li>Factual currency — reject topics built on laws that have since changed.</li>
+        </ul>
+      </div>
+
+      <p>Every one of those came from a mistake I'd already made by hand, at some point, before the system existed. Writing them down as filters didn't just save time — it meant the mistake couldn't recur silently. That's the actual value of encoding judgment into a system: it prevents the same error from happening twice.</p>
+
+      <h2>Catching my own mistakes, in public</h2>
+
+      <p>The honest version of this story includes the bugs, because the bugs are the proof the system was load-bearing rather than a demo. Three, specifically. The funnel analysis reported fifteen deals stuck at MQL when the real number was twenty-eight — caught by actually reading the report against what I knew from HubSpot, not by code review. The keyword-discovery workflow wasn't preserving status between runs, and the calendar paths were hardcoded to a single quarter — both caught and fixed the same day the system first shipped. A month later, the month-on-month and quarter-on-quarter performance calculations turned out to be wrong too, caught the same way: someone actually used the numbers for a decision, and the numbers didn't hold up.</p>
+
+      <p>Building fast with AI doesn't remove the need for a rigorous human checking the math. It just moves where that checking happens — from writing the code yourself to reading the output like you don't trust it yet. I don't trust it yet, on principle. That's what caught all three of these.</p>
+
+      <h2>What a week looks like now</h2>
+
+      <p>Two automations run without me touching anything. Monday at 9am, a HubSpot inbound-lead journey report lands in a new Google Sheets tab, tracking every inbound contact — web-tracked and CRM-only — since the previous Monday. Monday at 10am, the inbound funnel analysis follows: stage breakdown, conversion rates against targets, stalled-deal alerts, written specifically so a non-technical marketing lead can read it unassisted and know what to do next.</p>
+
+      <p>One thing is deliberately not automated: syncing the content calendar to Google Sheets requires an explicit flag. The sheet has manual formatting layered on top of it — red for rejected, strikethrough for removed — and a blind auto-sync would wipe that out. Leaving a step manual, on purpose, was the harder design call to make than automating it would have been.</p>
+
+      <p>A few other decisions came from the same instinct — build for what the moment actually needs, not what's easiest to automate:</p>
+
+      <ul>
+        <li>Query scripts instead of reading raw files. The blog inventory alone is over 100KB of JSON; loading all of it into a conversation burns tokens that should go toward analysis. A single query answers "do we already have this?" instead. It's a hard rule in the project's own instructions now: never read the full inventory file.</li>
+        <li>Snapshots over live queries for HubSpot. Pulling live every time risks rate limits and results that don't match week to week. Weekly JSON snapshots go stale slower than they cause problems, and they're reproducible.</li>
+        <li>A status field — active, planned, rejected, researched — on every keyword, so the system never re-proposes something already ruled out, and "why didn't we write about X" always has a documented answer.</li>
+      </ul>
+
+      <h2>Finding out I'd already built the framework</h2>
+
+      <p>A month after the system was already in daily use, I came across a post describing a four-layer architecture for AI-driven go-to-market work: a System of Context (markdown encoding ICP, competitors, positioning), a System of Skills (specialized tools per function), a System of Orchestration (agents coordinating which skills run), and a System of Integrations (the APIs to data sources and destinations).</p>
+
+      <p>I read it and realized my system already mapped onto all four layers, built independently, before I'd seen the framework named. Context was the project's own configuration files. Skills were the five workflows above. Orchestration was the sub-agent. Integrations were HubSpot, Semrush, Search Console, Plausible, Webflow, and Sheets.</p>
+
+      <blockquote>I built this to solve my own problem, and only afterward found out it matched a framework other people were publishing about.</blockquote>
+
+      <p>That's a better validation than any metric, because it means the shape of the system wasn't arbitrary — it was the shape the problem actually required, and someone else had arrived at the same shape from a different direction.</p>
+
+      <h2>What the real deliverable was</h2>
+
+      <p>The same method got reused recently for a different product line entirely — scoping content strategy for EquityList's secretarial-compliance product, a different surface, same underlying company. The reuse formalized into a repeatable eight-step narrowing cycle: map the full surface area before touching keywords, stress-test the lifecycle, validate volumes, apply inclusion filters, classify every rejected topic with a reason, reconcile keyword-gated against moment-gated views, tag, and route anything that isn't content to an off-blog asset instead.</p>
+
+      <p>That's the part I'd point to if someone asked what this project actually produced. Not the eighteen scripts or the five skills — those are the current implementation, and implementations change. What carried over to a second product was the method: a repeatable way of turning judgment calls I used to make one at a time, from memory, into something written down, checked, and reusable. The system was never really the deliverable. The judgment encoded inside it was.</p>
+    </div>
+
+    <div class="pagenav">
+      <a href="../read.html"><span class="dir">←</span>All writing</a>
+      <a class="nxt" href="../project-ai-automation.html"><span class="dir">The project →</span>AI Automation</a>
+    </div>
+  </article>
+</div>
+
+<script>
+  (function(){
+    var dd=document.getElementById('dd'),btn=document.getElementById('ddBtn');
+    btn.addEventListener('click',function(e){e.stopPropagation();var o=dd.classList.toggle('open');btn.setAttribute('aria-expanded',o);});
+    document.addEventListener('click',function(){dd.classList.remove('open');btn.setAttribute('aria-expanded',false);});
+  })();
+</script>
+</body>
+</html>
