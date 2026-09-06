@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Building EquityList's AI Content Operations System — Farheen Shaikh</title>
-<meta name="description" content="How I built a working AI operations system for content strategy at EquityList using Claude Code — the skills, the sub-agent, the bugs I caught by actually using it, and the framework I discovered I'd already built.">
+<meta name="description" content="How I built a working AI operations system for content strategy at EquityList using Claude Code — as a personal side project, in about a week, having never written a script before, with Claude writing every line of the code.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -108,46 +108,29 @@
   <article>
     <nav class="crumb"><a href="../index.html">Home</a> <span class="sep">/</span> <a href="../read.html">Read</a> <span class="sep">/</span> <span class="cur">Building EquityList's AI Content Operations System</span></nav>
 
-    <div class="pmeta">Essay · September 2026 · 9 min read</div>
+    <div class="pmeta">Essay · September 2026 · 8 min read</div>
     <h1>Building EquityList's AI Content Operations System</h1>
-    <p class="standfirst">I lead content strategy at EquityList with no engineering background. This is how I used Claude Code to build a working operations system for quarterly planning, weekly SEO and lead analysis, and content ops — the bugs I caught by actually using it, and the framework I found out I'd already built.</p>
+    <p class="standfirst">I'd never written a script in my life. Over one week, working with Claude Code as a personal side project, I found out how much of my own job could be turned into a system — and whether the team could eventually run the content engine without me.</p>
 
     <div class="body">
       <p>The job before this system was the ordinary content-marketer grind. Track a growing blog inventory by hand. Guess at keyword volumes. Pull Search Console and HubSpot exports one at a time. Build the quarter's calendar in a spreadsheet. There was no systematic way to answer "have we already covered this?" against 150-plus posts — you searched your memory, or you searched the spreadsheet, and hoped you searched it right.</p>
 
-      <p>I write for founders, CFOs, and HR/People Ops at Indian startups, Seed through Series C, expanding into the US. EquityList is an equity-management platform — cap tables, ESOPs, fundraising, compliance. None of that work needs a marketer who codes. It needed a system, and I built one with Claude Code and a layer of custom Skills on top of it: reusable, plain-English-triggered workflows that turned the spreadsheet grind into something I could just talk to.</p>
+      <p>I write for founders, CFOs, and HR/People Ops at Indian startups, Seed through Series C, expanding into the US. EquityList is an equity-management platform — cap tables, ESOPs, fundraising, compliance. Nobody asked me to build this. I started it as a side project, out of curiosity about a specific question: how much of my actual day-to-day could I automate, and could I get it far enough that the team could eventually run the content engine without needing me in the loop.</p>
 
-      <h2>Day zero wasn't a live build</h2>
+      <h2>A week, one skill at a time</h2>
 
-      <p>I want to be honest about how this started, because "I built this from scratch on stream" is a better story than the true one. The initial commit landed the whole skeleton at once: five skills, one sub-agent, eighteen Python scripts, and the full data layer — blog inventory, keyword map, competitor data, HubSpot snapshots, the Q2 calendar, thirty-plus weeks of pre-existing performance history. That was the first working version. Everything from there was refinement, done in the open, against real use.</p>
+      <p>I'd never written a script before this. Never touched Python or JSON, not even to read one. Claude wrote every line of code in the system — my job was to describe what I needed in plain English, test what came back, and push on the parts that didn't work yet.</p>
 
-      <p>The refinements started the same day. I fixed the keyword-discovery workflow because it wasn't preserving status between runs, and made the calendar paths dynamic instead of hardcoded to one quarter. A day later I extended the performance-analysis skill to pull HubSpot lead-journey data too, merging SEO performance and lead attribution into one report instead of two. A day after that, a full systems document — every script, every skill, every design decision, written in two passes, with a step-by-step section on replicating the whole thing for another company.</p>
+      <p>It came together over about a week, and it grew in the order the problems actually showed up. I started with the thing I needed most: a way to plan my quarterly calendar. I already had a separate Claude Projects setup for actually drafting and reviewing blog posts, built a while before this — Claude Code isn't the strongest tool for long-form writing, so I left that work exactly where it was. This system exists for everything around the writing, not the writing itself.</p>
 
-      <h2>What it looks like today</h2>
+      <p>Once calendar planning worked, I built performance tracking on top of it, so I could see how the posts I'd planned were actually doing. Then I went deeper, one vertical at a time: how do I shortlist which topics are actually worth writing, and how does the system know what I've already covered so it doesn't suggest the same topic twice. Each of those became its own piece, built and tested on its own before I moved to the next.</p>
 
-      <p>The system has four layers. Skills sit on top — the natural-language commands I actually type. Below that, a sub-agent handles research that would otherwise clutter the main conversation. Below that, eighteen-plus Python scripts do the orchestration: hitting APIs, processing data, syncing to Sheets. At the bottom, a data layer — JSON for anything nested and stateful, CSV for anything flat and meant to be opened in a spreadsheet. All of it reads from HubSpot, Google Search Console, Plausible, Semrush, and Webflow, and writes out to Google Sheets.</p>
+      <h2>The first run told me what was missing</h2>
 
-      <p>Five skills carry the actual work:</p>
-
-      <ul>
-        <li><code>/categorize-blogs</code> — turns a raw list of titles and URLs into a structured inventory: category, funnel stage, geography, content type, status.</li>
-        <li><code>/content-strategy</code> — the quarterly planning engine. Gap analysis, then competitor research (spawned as a sub-agent so it doesn't bloat the main conversation), then keyword discovery across forty-plus seed terms, then seven mandatory quality filters, then volume validation, then prioritization, then a ranked calendar of thirty-six to fifty topics.</li>
-        <li><code>/analyze-performance</code> — the weekly report. Search Console data merged with HubSpot deal data, producing quick wins, underperformer diagnoses, internal-linking suggestions, and an automated lead-journey pull.</li>
-        <li><code>/new-blog-published</code> — the post-publish checklist, automated: add to inventory, register the keyword, flip the calendar status from Planned to Published, suggest internal links.</li>
-        <li><code>/lead-magnets</code> — scans for keywords that imply a tool or template rather than a blog post, scores the opportunity, and outputs a build brief.</li>
-      </ul>
-
-      <figure>
-        <div class="frame"><img src="../images/ai-automation.svg" alt="System architecture: skills, sub-agent, scripts, data layer, and integrations" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/ai-automation.svg</span>')"></div>
-        <figcaption>The four-layer architecture: skills, sub-agent, scripts, data layer, external integrations.</figcaption>
-      </figure>
-
-      <h2>Where the judgment actually lives</h2>
-
-      <p>The quarterly-planning skill is the one that matters most, and the seven quality filters inside it are the closest thing this system has to my own editorial brain, written down as rules a machine can enforce every time:</p>
+      <p>The first time I actually ran the topic-shortlisting logic, the output didn't hold up. Topics that made no sense for the audience, terms that were technically wrong, ideas we'd already ruled out coming back around. That run is what told me shortlisting on its own wasn't enough — it needed guardrails in front of it, rules that would catch a bad topic before it ever reached the calendar. That's where the seven quality filters came from: not something I planned in advance, but something I wrote after watching the system get it wrong once.</p>
 
       <div class="spec">
-        <span class="lbl">Quality filters — /content-strategy</span>
+        <span class="lbl">Quality filters — topic shortlisting</span>
         <ul>
           <li>Audience match — would a founder or CFO actually search this, not an employee or a retail trader?</li>
           <li>Domain relevance — is it actually about equity management, not generic startup advice?</li>
@@ -159,15 +142,34 @@
         </ul>
       </div>
 
-      <p>Every one of those came from a mistake I'd already made by hand, at some point, before the system existed. Writing them down as filters didn't just save time — it meant the mistake couldn't recur silently. That's the actual value of encoding judgment into a system: it prevents the same error from happening twice.</p>
+      <p>Writing those down didn't just fix that one bad run. It meant the same mistake couldn't quietly happen again in a future run I wasn't watching as closely.</p>
+
+      <h2>What it looks like today</h2>
+
+      <p>The system that came out of that week has four layers. Skills sit on top — the natural-language commands I actually type. Below that, a sub-agent handles research that would otherwise clutter the main conversation. Below that, 18 Python scripts do the orchestration: hitting APIs, processing data, syncing to Sheets. At the bottom, a data layer — JSON for anything nested and stateful, CSV for anything flat and meant to be opened in a spreadsheet. All of it reads from HubSpot, Google Search Console, Plausible, Semrush, and Webflow, and writes out to Google Sheets.</p>
+
+      <p>Five skills carry the actual work:</p>
+
+      <ul>
+        <li><code>/categorize-blogs</code> — turns a raw list of titles and URLs into a structured inventory: category, funnel stage, geography, content type, status.</li>
+        <li><code>/content-strategy</code> — the quarterly planning engine this whole project started with. Gap analysis, then competitor research (spawned as a sub-agent so it doesn't bloat the main conversation), then keyword discovery, then the seven quality filters above, then volume validation, then prioritization, then a ranked calendar.</li>
+        <li><code>/analyze-performance</code> — the weekly report. Search Console data merged with HubSpot deal data, producing quick wins, underperformer diagnoses, and internal-linking suggestions.</li>
+        <li><code>/new-blog-published</code> — the post-publish checklist, automated: add to inventory, register the keyword, flip the calendar status from Planned to Published, suggest internal links.</li>
+        <li><code>/lead-magnets</code> — scans for keywords that imply a tool or template rather than a blog post, scores the opportunity, and outputs a build brief.</li>
+      </ul>
+
+      <figure>
+        <div class="frame"><img src="../images/ai-automation.svg" alt="System architecture: skills, sub-agent, scripts, data layer, and integrations" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/ai-automation.svg</span>')"></div>
+        <figcaption>The four-layer architecture: skills, sub-agent, scripts, data layer, external integrations.</figcaption>
+      </figure>
 
       <h2>Catching my own mistakes, in public</h2>
 
-      <p>The honest version of this story includes the bugs, because the bugs are the proof the system was load-bearing rather than a demo. Three, specifically. The funnel analysis reported fifteen deals stuck at MQL when the real number was twenty-eight — caught by actually reading the report against what I knew from HubSpot, not by code review. The keyword-discovery workflow wasn't preserving status between runs, and the calendar paths were hardcoded to a single quarter — both caught and fixed the same day the system first shipped. A month later, the month-on-month and quarter-on-quarter performance calculations turned out to be wrong too, caught the same way: someone actually used the numbers for a decision, and the numbers didn't hold up.</p>
+      <p>The honest version of this story includes the bugs, because the bugs are the proof the system was load-bearing rather than a demo. Three, specifically. The funnel analysis reported fifteen deals stuck at MQL when the real number was twenty-eight — caught by actually reading the report against what I knew from HubSpot, not by code review. The keyword-discovery workflow wasn't preserving status between runs, and the calendar paths were hardcoded to a single quarter — both caught early, while the system was still new enough that I was checking everything closely. Later, once it had been running for a while, the month-on-month and quarter-on-quarter performance calculations turned out to be wrong too, caught the same way: someone actually used the numbers for a decision, and the numbers didn't hold up.</p>
 
       <p>Building fast with AI doesn't remove the need for a rigorous human checking the math. It just moves where that checking happens — from writing the code yourself to reading the output like you don't trust it yet. I don't trust it yet, on principle. That's what caught all three of these.</p>
 
-      <h2>What a week looks like now</h2>
+      <h2>A typical week, running it now</h2>
 
       <p>Two automations run without me touching anything. Monday at 9am, a HubSpot inbound-lead journey report lands in a new Google Sheets tab, tracking every inbound contact — web-tracked and CRM-only — since the previous Monday. Monday at 10am, the inbound funnel analysis follows: stage breakdown, conversion rates against targets, stalled-deal alerts, written specifically so a non-technical marketing lead can read it unassisted and know what to do next.</p>
 
@@ -180,16 +182,6 @@
         <li>Snapshots over live queries for HubSpot. Pulling live every time risks rate limits and results that don't match week to week. Weekly JSON snapshots go stale slower than they cause problems, and they're reproducible.</li>
         <li>A status field — active, planned, rejected, researched — on every keyword, so the system never re-proposes something already ruled out, and "why didn't we write about X" always has a documented answer.</li>
       </ul>
-
-      <h2>Finding out I'd already built the framework</h2>
-
-      <p>A month after the system was already in daily use, I came across a post describing a four-layer architecture for AI-driven go-to-market work: a System of Context (markdown encoding ICP, competitors, positioning), a System of Skills (specialized tools per function), a System of Orchestration (agents coordinating which skills run), and a System of Integrations (the APIs to data sources and destinations).</p>
-
-      <p>I read it and realized my system already mapped onto all four layers, built independently, before I'd seen the framework named. Context was the project's own configuration files. Skills were the five workflows above. Orchestration was the sub-agent. Integrations were HubSpot, Semrush, Search Console, Plausible, Webflow, and Sheets.</p>
-
-      <blockquote>I built this to solve my own problem, and only afterward found out it matched a framework other people were publishing about.</blockquote>
-
-      <p>That's a better validation than any metric, because it means the shape of the system wasn't arbitrary — it was the shape the problem actually required, and someone else had arrived at the same shape from a different direction.</p>
 
       <h2>What the real deliverable was</h2>
 
