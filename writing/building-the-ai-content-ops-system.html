@@ -113,21 +113,21 @@
     <p class="standfirst">I'd never written a script in my life. Over one week, working with Claude Code as a personal side project, I found out how much of my own job could be turned into a system — and whether the team could eventually run the content engine without me.</p>
 
     <div class="body">
-      <p>The job before this system was the ordinary content-marketer grind. Track a growing blog inventory by hand. Guess at keyword volumes. Pull Search Console and HubSpot exports one at a time. Build the quarter's calendar in a spreadsheet. There was no systematic way to answer "have we already covered this?" against 150-plus posts — you searched your memory, or you searched the spreadsheet, and hoped you searched it right.</p>
+      <p>I write for founders, CFOs, and HR/People Ops at Indian startups, Seed through Series C, expanding into the US. EquityList is an equity-management platform — cap tables, ESOPs, fundraising, compliance. Nobody asked me to build this system. I started it as a side project, out of curiosity about a specific question: how much of my actual day-to-day could I automate, and could I get it far enough that the team could eventually run the content engine without needing me in the loop.</p>
 
-      <p>I write for founders, CFOs, and HR/People Ops at Indian startups, Seed through Series C, expanding into the US. EquityList is an equity-management platform — cap tables, ESOPs, fundraising, compliance. Nobody asked me to build this. I started it as a side project, out of curiosity about a specific question: how much of my actual day-to-day could I automate, and could I get it far enough that the team could eventually run the content engine without needing me in the loop.</p>
+      <p>The day-to-day I wanted to automate looked like this. To plan a quarter, I'd go through our existing blog list by hand to see what we'd already covered and where the gaps were, pull ideas out of that gap, look up each candidate keyword in Semrush one at a time to check the volume, tag every surviving topic as TOFU, MOFU, or BOFU, and then prioritize the list by feel. Separately, once posts were live, I'd pull performance data out of Search Console and HubSpot and manually reconcile the two into something that actually told me whether a post was working. Neither step was guesswork — I had real data in Semrush and Search Console the whole time. The work was doing all of that by hand, one keyword and one export at a time, with no link between "here's the data" and "here's what to do about it."</p>
 
-      <h2>A week, one skill at a time</h2>
+      <h2>Week one, and I'd never opened Claude Code before</h2>
 
-      <p>I'd never written a script before this. Never touched Python or JSON, not even to read one. Claude wrote every line of code in the system — my job was to describe what I needed in plain English, test what came back, and push on the parts that didn't work yet.</p>
+      <p>This was the first time I'd used Claude Code at all, not just the first time I'd built anything with it. I'd never written a script before, never touched Python or JSON, not even to read one. Claude wrote every line of code in the system. My job was to describe what I needed in plain English, test what came back against data I already trusted, and push on the parts that didn't work yet.</p>
 
-      <p>It came together over about a week, and it grew in the order the problems actually showed up. I started with the thing I needed most: a way to plan my quarterly calendar. I already had a separate Claude Projects setup for actually drafting and reviewing blog posts, built a while before this — Claude Code isn't the strongest tool for long-form writing, so I left that work exactly where it was. This system exists for everything around the writing, not the writing itself.</p>
+      <p>I didn't move on to the next piece until the one in front of me actually worked. That's the order the system grew in, and it's the same order the manual pain showed up in.</p>
 
-      <p>Once calendar planning worked, I built performance tracking on top of it, so I could see how the posts I'd planned were actually doing. Then I went deeper, one vertical at a time: how do I shortlist which topics are actually worth writing, and how does the system know what I've already covered so it doesn't suggest the same topic twice. Each of those became its own piece, built and tested on its own before I moved to the next.</p>
+      <h2>First: the quarterly calendar</h2>
 
-      <h2>The first run told me what was missing</h2>
+      <p>The calendar was the most painful part, so it's what I built first. This became the <code>/content-strategy</code> skill: gap analysis against the existing blog inventory, keyword discovery, funnel-stage tagging, and prioritization, all in one pass instead of four separate manual steps.</p>
 
-      <p>The first time I actually ran the topic-shortlisting logic, the output didn't hold up. Topics that made no sense for the audience, terms that were technically wrong, ideas we'd already ruled out coming back around. That run is what told me shortlisting on its own wasn't enough — it needed guardrails in front of it, rules that would catch a bad topic before it ever reached the calendar. That's where the seven quality filters came from: not something I planned in advance, but something I wrote after watching the system get it wrong once.</p>
+      <p>Getting the shortlisting right took a real failure first. The first time I actually ran it, the topics it handed back didn't hold up — some were technically wrong terms with high volume, some were things we'd already written and ruled out, some just weren't things a founder or CFO would ever search. That run is what told me a keyword list alone wasn't enough; it needed guardrails in front of it that would catch a bad topic before it ever reached the calendar. The seven quality filters below came out of that one bad run, not from planning ahead of time:</p>
 
       <div class="spec">
         <span class="lbl">Quality filters — topic shortlisting</span>
@@ -142,52 +142,48 @@
         </ul>
       </div>
 
-      <p>Writing those down didn't just fix that one bad run. It meant the same mistake couldn't quietly happen again in a future run I wasn't watching as closely.</p>
+      <p>Writing those down fixed more than that one run. The "no duplication" filter depends on every keyword carrying a status — active, planned, rejected, researched — and building that out surfaced two more bugs in the same pass: the keyword tracker wasn't actually preserving that status between runs, so a topic I'd already rejected could quietly come back a week later, and the calendar's file paths were hardcoded to a single quarter, so the whole thing would have broken the moment Q3 planning started. Both were caught early, while I was still checking every output closely, and both got fixed before I trusted the calendar enough to move on.</p>
 
-      <h2>What it looks like today</h2>
+      <h2>Then: performance tracking</h2>
 
-      <p>The system that came out of that week has four layers. Skills sit on top — the natural-language commands I actually type. Below that, a sub-agent handles research that would otherwise clutter the main conversation. Below that, 18 Python scripts do the orchestration: hitting APIs, processing data, syncing to Sheets. At the bottom, a data layer — JSON for anything nested and stateful, CSV for anything flat and meant to be opened in a spreadsheet. All of it reads from HubSpot, Google Search Console, Plausible, Semrush, and Webflow, and writes out to Google Sheets.</p>
+      <p>Once the calendar was functional, the next manual bottleneck was the one on the other end — pulling Search Console and HubSpot data separately and reconciling them by hand to see if any of it was actually working. This became <code>/analyze-performance</code>: one report that merges SEO performance with lead attribution, so I can see quick wins, underperforming posts, and internal-linking gaps in one place instead of two spreadsheets.</p>
 
-      <p>Five skills carry the actual work:</p>
+      <p>This is where the most consequential bug showed up. An early funnel-analysis run reported fifteen deals stuck at the MQL stage. I happened to know the real number from HubSpot directly, and it was twenty-eight — not a rounding difference, a real miscount in the funnel logic. I caught it by reading the report against what I already knew, not by reviewing the code, and that's the pattern that mattered: building fast with AI doesn't remove the need for someone checking the math, it just moves where that checking happens, from writing the calculation yourself to refusing to trust the output until you've verified it against something real. Later, once the system had been running long enough that I was checking things less closely, the month-on-month and quarter-on-quarter calculations turned out to be wrong too — caught the same way, because someone was actually using the numbers for a real decision and the numbers didn't hold up.</p>
+
+      <h2>What came out of that week</h2>
+
+      <p>By the end of the week, the system had four layers. Skills sit on top — the natural-language commands I actually type. Below that, a sub-agent handles competitor research so it doesn't clutter the main planning conversation. Below that, 18 Python scripts do the orchestration: hitting APIs, processing data, syncing to Sheets. At the bottom, a data layer — JSON for anything nested and stateful, CSV for anything flat and meant to be opened in a spreadsheet. All of it reads from HubSpot, Google Search Console, Plausible, Semrush, and Webflow, and writes out to Google Sheets.</p>
+
+      <p>Five skills in total, the two above plus three I added once those were solid:</p>
 
       <ul>
+        <li><code>/content-strategy</code> — the quarterly planning engine described above: gap analysis, competitor research, keyword discovery, the seven quality filters, volume validation, prioritization, a ranked calendar.</li>
+        <li><code>/analyze-performance</code> — the weekly SEO-plus-lead-attribution report described above.</li>
         <li><code>/categorize-blogs</code> — turns a raw list of titles and URLs into a structured inventory: category, funnel stage, geography, content type, status.</li>
-        <li><code>/content-strategy</code> — the quarterly planning engine this whole project started with. Gap analysis, then competitor research (spawned as a sub-agent so it doesn't bloat the main conversation), then keyword discovery, then the seven quality filters above, then volume validation, then prioritization, then a ranked calendar.</li>
-        <li><code>/analyze-performance</code> — the weekly report. Search Console data merged with HubSpot deal data, producing quick wins, underperformer diagnoses, and internal-linking suggestions.</li>
         <li><code>/new-blog-published</code> — the post-publish checklist, automated: add to inventory, register the keyword, flip the calendar status from Planned to Published, suggest internal links.</li>
         <li><code>/lead-magnets</code> — scans for keywords that imply a tool or template rather than a blog post, scores the opportunity, and outputs a build brief.</li>
       </ul>
+
+      <p>One thing I deliberately kept outside this system: actually drafting and reviewing the blog posts themselves. I already had a separate Claude Projects setup for that, built a while before this project — Claude Code isn't the strongest tool for long-form writing, so I left that work exactly where it was and built this system for everything around the writing instead.</p>
 
       <figure>
         <div class="frame"><img src="../images/ai-automation.svg" alt="System architecture: skills, sub-agent, scripts, data layer, and integrations" onerror="this.style.display='none';this.parentNode.insertAdjacentHTML('beforeend','<span class=ph>images/ai-automation.svg</span>')"></div>
         <figcaption>The four-layer architecture: skills, sub-agent, scripts, data layer, external integrations.</figcaption>
       </figure>
 
-      <h2>Catching my own mistakes, in public</h2>
+      <h2>The parts that run without me</h2>
 
-      <p>The honest version of this story includes the bugs, because the bugs are the proof the system was load-bearing rather than a demo. Three, specifically. The funnel analysis reported fifteen deals stuck at MQL when the real number was twenty-eight — caught by actually reading the report against what I knew from HubSpot, not by code review. The keyword-discovery workflow wasn't preserving status between runs, and the calendar paths were hardcoded to a single quarter — both caught early, while the system was still new enough that I was checking everything closely. Later, once it had been running for a while, the month-on-month and quarter-on-quarter performance calculations turned out to be wrong too, caught the same way: someone actually used the numbers for a decision, and the numbers didn't hold up.</p>
+      <p>Two automations went live that same week and still run without me touching anything. Monday at 9am, a HubSpot inbound-lead journey report lands in a new Google Sheets tab, tracking every inbound contact since the previous Monday. Monday at 10am, the inbound funnel analysis follows: stage breakdown, conversion rates against targets, stalled-deal alerts, written specifically so a non-technical marketing lead can read it unassisted and know what to do next.</p>
 
-      <p>Building fast with AI doesn't remove the need for a rigorous human checking the math. It just moves where that checking happens — from writing the code yourself to reading the output like you don't trust it yet. I don't trust it yet, on principle. That's what caught all three of these.</p>
+      <p>One thing is deliberately not automated: syncing the content calendar to Google Sheets requires an explicit flag. The sheet has manual formatting layered on top of it — red for rejected, strikethrough for removed — and a blind auto-sync would wipe that out. Leaving that one step manual, on purpose, was the harder call to make than automating it would have been.</p>
 
-      <h2>A typical week, running it now</h2>
+      <p>A couple of smaller decisions came from the same instinct: build for what the moment actually needs, even when full automation would have been easier to build. The blog inventory alone is over 100KB of JSON, so instead of loading the whole file into a conversation, a query script answers "do we already have this?" directly — it's a hard rule in the project's own instructions now, never read the full inventory file. And HubSpot data gets pulled into weekly snapshots instead of queried live, because a live pull every time risks rate limits and numbers that don't match from one week to the next.</p>
 
-      <p>Two automations run without me touching anything. Monday at 9am, a HubSpot inbound-lead journey report lands in a new Google Sheets tab, tracking every inbound contact — web-tracked and CRM-only — since the previous Monday. Monday at 10am, the inbound funnel analysis follows: stage breakdown, conversion rates against targets, stalled-deal alerts, written specifically so a non-technical marketing lead can read it unassisted and know what to do next.</p>
+      <h2>What actually carried forward</h2>
 
-      <p>One thing is deliberately not automated: syncing the content calendar to Google Sheets requires an explicit flag. The sheet has manual formatting layered on top of it — red for rejected, strikethrough for removed — and a blind auto-sync would wipe that out. Leaving a step manual, on purpose, was the harder design call to make than automating it would have been.</p>
+      <p>The same method got reused recently for a different product line — scoping content strategy for EquityList's secretarial-compliance product, a different surface, same company. It formalized into a repeatable eight-step narrowing cycle: map the full surface area before touching keywords, stress-test the lifecycle, validate volumes, apply inclusion filters, classify every rejected topic with a reason, reconcile keyword-gated against moment-gated views, tag, and route anything that isn't content to an off-blog asset instead.</p>
 
-      <p>A few other decisions came from the same instinct — build for what the moment actually needs, not what's easiest to automate:</p>
-
-      <ul>
-        <li>Query scripts instead of reading raw files. The blog inventory alone is over 100KB of JSON; loading all of it into a conversation burns tokens that should go toward analysis. A single query answers "do we already have this?" instead. It's a hard rule in the project's own instructions now: never read the full inventory file.</li>
-        <li>Snapshots over live queries for HubSpot. Pulling live every time risks rate limits and results that don't match week to week. Weekly JSON snapshots go stale slower than they cause problems, and they're reproducible.</li>
-        <li>A status field — active, planned, rejected, researched — on every keyword, so the system never re-proposes something already ruled out, and "why didn't we write about X" always has a documented answer.</li>
-      </ul>
-
-      <h2>What the real deliverable was</h2>
-
-      <p>The same method got reused recently for a different product line entirely — scoping content strategy for EquityList's secretarial-compliance product, a different surface, same underlying company. The reuse formalized into a repeatable eight-step narrowing cycle: map the full surface area before touching keywords, stress-test the lifecycle, validate volumes, apply inclusion filters, classify every rejected topic with a reason, reconcile keyword-gated against moment-gated views, tag, and route anything that isn't content to an off-blog asset instead.</p>
-
-      <p>That's the part I'd point to if someone asked what this project actually produced. Not the eighteen scripts or the five skills — those are the current implementation, and implementations change. What carried over to a second product was the method: a repeatable way of turning judgment calls I used to make one at a time, from memory, into something written down, checked, and reusable. The system was never really the deliverable. The judgment encoded inside it was.</p>
+      <p>That's the part I'd point to if someone asked what this project actually produced. Not the eighteen scripts or the five skills — those are one implementation, and implementations change. What carried over to a second product was the method underneath them: a repeatable way of turning judgment calls I used to make one at a time, from memory, into something written down, checked, and reusable.</p>
     </div>
 
     <div class="pagenav">
