@@ -1,20 +1,25 @@
 # Farheen Shaikh — Portfolio
 
-Static portfolio site. Plain HTML/CSS, no build step. Hosted on GitHub Pages.
+Static portfolio site. Plain HTML/CSS, no build step, no dependencies beyond a Google Fonts stylesheet. Hosted on GitHub Pages.
 
-## Quick start
-1. This repo is the site. Push to `main` and GitHub Pages serves it.
-2. Settings → Pages → Deploy from branch → `main` / root.
-3. Live at `https://<username>.github.io/<repo>/`.
+Live at https://farheeeeeeen.github.io/portfolio/
 
-## Docs
-- **DEPLOY.md** — GitHub Pages setup, image/video handling
-- **MAINTENANCE.md** — how to edit/extend every part of the site
-- **PENDING.md** — what's left to finish before sharing
+## Running it locally
+
+No build step — open `index.html` in a browser, or serve the directory:
+
+```
+python3 -m http.server 8000
+```
 
 ## Structure
+
 - `index.html` — homepage
-- `project-*.html` — seven project pages
-- `read.html` + `writing/` — writing section
-- `resume.html` — résumé (to build)
-- `images/` — screenshots (add your own; compress first)
+- `project-ai-automation.html`, `project-growth.html`, `project-mvp.html`, `project-positioning.html`, `project-engagement-retention.html` — the five project pages
+- `read.html` + `writing/` — writing section; `writing/_template.html` is the article template
+- `resume.html` — résumé
+- `images/` — screenshots and video (compress before committing; there is no optimization step)
+
+## Deploying
+
+Push to `main`. GitHub Pages serves from `main` / root, live about a minute later.
