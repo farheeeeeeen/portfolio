@@ -11,6 +11,15 @@ images/positioning_finance.png
 images/positioning_hr.png
 images/positioning_qapita_alternative.png
 
+# Uncropped internal deck slides — only the cropped web versions ship
+images/engagement_coins_AUM.png
+
 # Calculator demo videos (original GIFs are very large)
 *.gif
-images/Incorporation-Report-20260601.xlsx
+
+# Documents and spreadsheets — never commit
+*.xlsx
+*.xls
+*.csv
+*.pdf
+*.docx
